@@ -1,9 +1,6 @@
 #ifndef MATRIZ_H
 #define MATRIZ_H
 #include "jogador.h"
-#include <stdio.h>
-
-#define TAMANHO 22
 
 typedef conexaoMatriz{
 
@@ -107,12 +104,12 @@ int calcularEntrosamentoMatriz (Jogador j1, Jogador j2)
 {
     int entrosamento = 0;
 
-    if (j1.Nacionalidade == j2.Nacionalidade)
+    if (j1.nacionalidade == j2.nacionalidade)
     {
         entrosamento = 1;
     }
 
-    else if (j1.Time == j2.Time)
+    else if (j1.time == j2.time)
     {
         entrosamento = 2;
     }

@@ -1,6 +1,7 @@
 #ifndef JOGADOR_H
 #define JOGADOR_H
 
+#define TAMANHO 22
 #define MAX 50
 /* 
  time = 2

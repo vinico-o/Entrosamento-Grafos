@@ -1,8 +1,9 @@
 #ifndef LISTA_H
 #define LISTA_H
+#include <stdlib.h>
 #include "jogador.h"
 
-typedef conexaoLista {
+typedef conexaoLista{
 
     Jogador j;
     int peso;
@@ -19,7 +20,7 @@ typedef grafoLista{
 
 void inicializarLista(grafoLista *g)
 {
-    for (int i = 0; i < TAMANHO; j++)
+    for (int i = 0; i < TAMANHO; i++)
     {
         g->adj[i] = malloc(sizeof(conexaoLista));
         g->adj[i]->prox = NULL;
@@ -102,12 +103,12 @@ int calcularEntrosamentoLista(Jogador j1, Jogador j2)
 {
     int entrosamento = 0;
 
-    if (j1.Nacionalidade == j2.Nacionalidade)
+    if (j1.nacionalidade == j2.nacionalidade)
     {
         entrosamento = 1;
     }
 
-    else if (j1.Time == j2.Time)
+    else if (j1.time == j2.time)
     {
         entrosamento = 2;
     }
