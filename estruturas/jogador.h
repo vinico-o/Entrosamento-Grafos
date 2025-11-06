@@ -10,7 +10,7 @@ padrao = 0
  */
 
 
-enum Nacionalidade
+typedef enum
 {
     BRASIL,
     ARGENTINA,
@@ -21,9 +21,9 @@ enum Nacionalidade
     HOLANDA,
     ITALIA,
     FRANCA
-};
+}Nacionalidade;
 
-enum Time
+typedef enum
 {
     PALMEIRAS,
     FLAMENGO,
@@ -45,7 +45,7 @@ enum Time
     FORTALEZA,
     CEARA,
     SANTOS
-};
+}Time;
 
 typedef enum {
     GOL,      // Goleiro
@@ -60,6 +60,12 @@ typedef enum {
     CA,       // Centro Avante (Atacante Central)
     PE        // Ponta Esquerda
 } Posicao;
+
+char *posicoesTitularesReservas[] = {"Goleiros", "Laterais Direito", "Zagueiros Direito", "Zagueiros Esquerdo", "Laterais Esquerdo", 
+                    "Meias Central", "Meias Central Direito", "Meias Central Esquerdo", "Pontas Direita", 
+                    "Centro Avante", "Ponta Esquerda"};
+char *posicoesChar[] = {"GOL", "LD", "LE", "ZD", "ZE", "MC", "ME", "MD", "PE", "PD", "CA"};
+
 
 typedef struct jogador
 {
