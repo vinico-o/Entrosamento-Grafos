@@ -2,6 +2,12 @@
 #define JOGADOR_H
 
 #define MAX 50
+/* 
+ time = 2
+ nacionalidade = 1 
+padrao = 0
+ */
+
 
 enum Nacionalidade
 {
@@ -46,7 +52,7 @@ typedef enum {
     ZD,       // Zagueiro Direito
     ZE,       // Zagueiro Esquerdo
     LE,       // Lateral Esquerdo
-    VOL,      // Volante
+    MC,       // Meia Central
     MD,       // Meia Central Direito
     ME,       // Meia Central Esquerdo
     PD,       // Ponta Direita
