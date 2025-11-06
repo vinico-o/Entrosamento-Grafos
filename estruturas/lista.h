@@ -1,6 +1,6 @@
 #ifndef LISTA_H
 #define LISTA_H
-
+#include "jogador.h"
 
 typedef conexaoLista {
 
