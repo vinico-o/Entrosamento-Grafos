@@ -15,78 +15,110 @@ typedef conexaoMatriz{
 
 typedef grafoMatriz{
 
-    conexaoMatriz adj[11][11];
+    conexaoMatriz adj[TAMANHO][TAMANHO];
 
 }grafoMatriz;
 
 
+void montarConexoesMatriz(grafoMatriz *g, int time)
+{
+    //O indice indica a posicao da outra componente conexa (time reserva)
+    int indice;
+
+    if (time == 1)
+    {
+        indice = 0;
+    }
+
+    if (time == 2)
+    {
+        indice = 11;
+    }
+
+    // formação 4-3-3
+    // goleiro
+    g->adj[GOL + indice][ZD + indice]->estaConectado = 1;
+    g->adj[GOL + indice][ZE + indice]->estaConectado = 1;
+
+    // zagueiro esquerda
+    g->adj[ZE + indice][GOL + indice]->estaConectado = 1;
+    g->adj[ZE + indice][ZD + indice]->estaConectado = 1;
+    g->adj[ZE + indice][LE + indice]->estaConectado = 1;
+    g->adj[ZE + indice][ME + indice]->estaConectado = 1;
+
+    // zagueiro direita
+    g->adj[ZD + indice][GOL + indice]->estaConectado = 1;
+    g->adj[ZD + indice][ZE + indice]->estaConectado = 1;
+    g->adj[ZD + indice][LD + indice]->estaConectado = 1;
+    g->adj[ZD + indice][MD + indice]->estaConectado = 1;
+
+    // lateral esquerda
+    g->adj[LE + indice][ZE + indice]->estaConectado = 1;
+    g->adj[LE + indice][ME + indice]->estaConectado = 1;
+
+    // lateral direito
+    g->adj[LD + indice][ZD + indice]->estaConectado = 1;
+    g->adj[LD + indice][MD + indice]->estaConectado = 1;
+
+    // meio campo esquerdo
+    g->adj[ME + indice][LE + indice]->estaConectado = 1;
+    g->adj[ME + indice][ZE + indice]->estaConectado = 1;
+    g->adj[ME + indice][MC + indice]->estaConectado = 1;
+    g->adj[ME + indice][PE + indice]->estaConectado = 1;
+
+    // meio campo central
+    g->adj[MC + indice][ME + indice]->estaConectado = 1;
+    g->adj[MC + indice][MD + indice]->estaConectado = 1;
+    g->adj[MC + indice][CA + indice]->estaConectado = 1;
+
+    // meio campo direito
+    g->adj[MD + indice][LD + indice]->estaConectado = 1;
+    g->adj[MD + indice][ZD + indice]->estaConectado = 1;
+    g->adj[MD + indice][MC + indice]->estaConectado = 1;
+    g->adj[MD + indice][PD + indice]->estaConectado = 1;
+
+    // ponta esquerda
+    g->adj[PE + indice][ME + indice]->estaConectado = 1;
+    g->adj[PE + indice][CA + indice]->estaConectado = 1;
+
+    // ponta direita
+    g->adj[PD + indice][MD + indice]->estaConectado = 1;
+    g->adj[PD + indice][CA + indice]->estaConectado = 1;
+
+    // centro avante
+    g->adj[CA + indice][PE + indice]->estaConectado = 1;
+    g->adj[CA + indice][PD + indice]->estaConectado = 1;
+    g->adj[CA + indice][MC + indice]->estaConectado = 1;
+}
+
 void inicializarMatriz(grafoMatriz *g)
 {
-    for (int i = 1; i < 11; i++)
+    for (int i = 1; i < TAMANHO; i++)
     {
-        for (int j = 0; j < 11; j++)
+        for (int j = 0; j < TAMANHO; j++)
         {
             g->adj[i][j]->estaConectado = 0;
             g->adj[i][j]->peso = 0;
         }
     }
-
-    // goleiro
-    g->adj[GOL][ZD]->estaConectado = 1;
-    g->adj[GOL][ZE]->estaConectado = 1;
-
-    // zagueiro esquerda
-    g->adj[ZE][GOL]->estaConectado = 1;
-    g->adj[ZE][ZD]->estaConectado = 1;
-    g->adj[ZE][LE]->estaConectado = 1;
-    g->adj[ZE][ME]->estaConectado = 1;
-
-    // zagueiro direita
-    g->adj[ZD][GOL]->estaConectado = 1;
-    g->adj[ZD][ZE]->estaConectado = 1;
-    g->adj[ZD][LD]->estaConectado = 1;
-    g->adj[ZD][MD]->estaConectado = 1;
-
-    // lateral esquerda
-    g->adj[LE][ZE]->estaConectado = 1;
-    g->adj[LE][ME]->estaConectado = 1;
-
-    // lateral direito
-    g->adj[LD][ZD]->estaConectado = 1;
-    g->adj[LD][MD]->estaConectado = 1;
-
-    // meio campo esquerdo
-    g->adj[ME][LE]->estaConectado = 1;
-    g->adj[ME][ZE]->estaConectado = 1;
-    g->adj[ME][MC]->estaConectado = 1;
-    g->adj[ME][PE]->estaConectado = 1;
-
-    // meio campo central
-    g->adj[MC][ME]->estaConectado = 1;
-    g->adj[MC][MD]->estaConectado = 1;
-    g->adj[MC][CA]->estaConectado = 1;
-
-    // meio campo direito
-    g->adj[MD][LD]->estaConectado = 1;
-    g->adj[MD][ZD]->estaConectado = 1;
-    g->adj[MD][MC]->estaConectado = 1;
-    g->adj[MD][PD]->estaConectado = 1;
-
-    // ponta esquerda
-    g->adj[PE][ME]->estaConectado = 1;
-    g->adj[PE][CA]->estaConectado = 1;
-
-    // ponta direita
-    g->adj[PD][MD]->estaConectado = 1;
-    g->adj[PD][CA]->estaConectado = 1;
-
-    // centro avante
-    g->adj[CA][PE]->estaConectado = 1;
-    g->adj[CA][PD]->estaConectado = 1;
-    g->adj[CA][MC]->estaConectado = 1;
-
 }
 
+int calcularEntrosamentoMatriz (Jogador j1, Jogador j2)
+{
+    int entrosamento = 0;
+
+    if (j1.Nacionalidade == j2.Nacionalidade)
+    {
+        entrosamento = 1;
+    }
+
+    else if (j1.Time == j2.Time)
+    {
+        entrosamento = 2;
+    }
+
+    return entrosamento;
+}
 
 
 
