@@ -1,19 +1,19 @@
-Criciúma
-Criciúma
-Criciúma
-Criciúma
-Criciúma
-Criciúma
-Criciúma
-Criciúma
-Criciúma
-Criciúma
-Criciúma
-Criciúma
-Criciúma
-Criciúma
-Criciúma
-Criciúma
+Criciuma
+Criciuma
+Criciuma
+Criciuma
+Criciuma
+Criciuma
+Criciuma
+Criciuma
+Criciuma
+Criciuma
+Criciuma
+Criciuma
+Criciuma
+Criciuma
+Criciuma
+Criciuma
 Juventude
 Juventude
 Juventude
@@ -76,22 +76,22 @@ Athletico Paranaense
 Athletico Paranaense
 Athletico Paranaense
 Athletico Paranaense
-Cuiabá
-Cuiabá
-Cuiabá
-Cuiabá
-Cuiabá
-Cuiabá
-Cuiabá
-Cuiabá
-Cuiabá
-Cuiabá
-Cuiabá
-Cuiabá
-Cuiabá
-Cuiabá
-Cuiabá
-Cuiabá
+Cuiaba
+Cuiaba
+Cuiaba
+Cuiaba
+Cuiaba
+Cuiaba
+Cuiaba
+Cuiaba
+Cuiaba
+Cuiaba
+Cuiaba
+Cuiaba
+Cuiaba
+Cuiaba
+Cuiaba
+Cuiaba
 Vasco da Gama
 Vasco da Gama
 Vasco da Gama
@@ -108,20 +108,20 @@ Vasco da Gama
 Vasco da Gama
 Vasco da Gama
 Vasco da Gama
-Grêmio
-Grêmio
-Grêmio
-Grêmio
-Grêmio
-Grêmio
-Grêmio
-Grêmio
-Grêmio
-Grêmio
-Grêmio
-Grêmio
-Grêmio
-Grêmio
+Gremio
+Gremio
+Gremio
+Gremio
+Gremio
+Gremio
+Gremio
+Gremio
+Gremio
+Gremio
+Gremio
+Gremio
+Gremio
+Gremio
 Corinthians
 Corinthians
 Corinthians
@@ -138,35 +138,35 @@ Corinthians
 Corinthians
 Corinthians
 Corinthians
-Atlético Mineiro
-Atlético Mineiro
-Atlético Mineiro
-Atlético Mineiro
-Atlético Mineiro
-Atlético Mineiro
-Atlético Mineiro
-Atlético Mineiro
-Atlético Mineiro
-Atlético Mineiro
-Atlético Mineiro
-Atlético Mineiro
-Atlético Mineiro
-Atlético Mineiro
-Atlético Goianiense
-Atlético Goianiense
-Atlético Goianiense
-Atlético Goianiense
-Atlético Goianiense
-Atlético Goianiense
-Atlético Goianiense
-Atlético Goianiense
-Atlético Goianiense
-Atlético Goianiense
-Atlético Goianiense
-Atlético Goianiense
-Atlético Goianiense
-Atlético Goianiense
-Atlético Goianiense
+Atletico Mineiro
+Atletico Mineiro
+Atletico Mineiro
+Atletico Mineiro
+Atletico Mineiro
+Atletico Mineiro
+Atletico Mineiro
+Atletico Mineiro
+Atletico Mineiro
+Atletico Mineiro
+Atletico Mineiro
+Atletico Mineiro
+Atletico Mineiro
+Atletico Mineiro
+Atletico Goianiense
+Atletico Goianiense
+Atletico Goianiense
+Atletico Goianiense
+Atletico Goianiense
+Atletico Goianiense
+Atletico Goianiense
+Atletico Goianiense
+Atletico Goianiense
+Atletico Goianiense
+Atletico Goianiense
+Atletico Goianiense
+Atletico Goianiense
+Atletico Goianiense
+Atletico Goianiense
 Flamengo
 Flamengo
 Flamengo
@@ -216,22 +216,22 @@ Botafogo
 Botafogo
 Botafogo
 Botafogo
-Vitória
-Vitória
-Vitória
-Vitória
-Vitória
-Vitória
-Vitória
-Vitória
-Vitória
-Vitória
-Vitória
-Vitória
-Vitória
-Vitória
-Vitória
-Vitória
+Vitoria
+Vitoria
+Vitoria
+Vitoria
+Vitoria
+Vitoria
+Vitoria
+Vitoria
+Vitoria
+Vitoria
+Vitoria
+Vitoria
+Vitoria
+Vitoria
+Vitoria
+Vitoria
 Palmeiras
 Palmeiras
 Palmeiras
@@ -263,36 +263,36 @@ Fluminense
 Fluminense
 Fluminense
 Fluminense
-Red Bull Bragantino
-Red Bull Bragantino
-Red Bull Bragantino
-Red Bull Bragantino
-Red Bull Bragantino
-Red Bull Bragantino
-Red Bull Bragantino
-Red Bull Bragantino
-Red Bull Bragantino
-Red Bull Bragantino
-Red Bull Bragantino
-Red Bull Bragantino
-Red Bull Bragantino
-Red Bull Bragantino
-Red Bull Bragantino
-Red Bull Bragantino
-São Paulo
-São Paulo
-São Paulo
-São Paulo
-São Paulo
-São Paulo
-São Paulo
-São Paulo
-São Paulo
-São Paulo
-São Paulo
-São Paulo
-São Paulo
-São Paulo
+Bragantino
+Bragantino
+Bragantino
+Bragantino
+Bragantino
+Bragantino
+Bragantino
+Bragantino
+Bragantino
+Bragantino
+Bragantino
+Bragantino
+Bragantino
+Bragantino
+Bragantino
+Bragantino
+Sao Paulo
+Sao Paulo
+Sao Paulo
+Sao Paulo
+Sao Paulo
+Sao Paulo
+Sao Paulo
+Sao Paulo
+Sao Paulo
+Sao Paulo
+Sao Paulo
+Sao Paulo
+Sao Paulo
+Sao Paulo
 Fortaleza
 Fortaleza
 Fortaleza

@@ -6,7 +6,7 @@
 #include "grafo_lista.c"
 #include "grafo_matriz.c"
 
-#define MAX_JOGADORES 100
+#define MAX_JOGADORES 311 //Numero de jogadores nos arquivos
 
 int lerArquivo(const char* nome, char dados[][100], int maxLinhas)
 {
@@ -226,9 +226,9 @@ int main()
     // seed para aleatorizar os jogadores
     srand(time(NULL));
 
-    printf("=================================================\n");
-    printf("   SISTEMA DE GRAFOS DE JOGADORES DE FUTEBOL\n");
-    printf("=================================================\n\n");
+    printf("+-----------------------------------------------+\n");
+    printf("|   SISTEMA DE GRAFOS DE JOGADORES DE FUTEBOL   |\n");
+    printf("+-----------------------------------------------+\n");
 
     char nomes[MAX_JOGADORES][100];
     char posicoes[MAX_JOGADORES][100];
@@ -257,8 +257,12 @@ int main()
 
     Jogador* jogadores = (Jogador*)malloc(22 * sizeof(Jogador));
 
-    printf("=== ESCALACAO (22 jogadores sorteados) ===\n\n");
-    printf("TITULARES:\n");
+    printf("+-----------------------------------------------+\n");
+    printf("|        ESCALACAO GERADA AUTOMATICAMENTE       |\n");
+    printf("+-----------------------------------------------+\n");
+    printf("+-----------------------------------------------+\n");
+    printf("|                   TITULARES                   |\n");
+    printf("+-----------------------------------------------+\n");
     for(int i = 0; i < 11; i++)
     {
         int idx = indices[i];
@@ -267,10 +271,12 @@ int main()
         strcpy(jogadores[i].posicao, posicoes[idx]);
         strcpy(jogadores[i].time, times[idx]);
         strcpy(jogadores[i].nacionalidade, nacionalidades[idx]);
-        printf("%d. %s - %s (%s, %s)\n", i+1, jogadores[i].nome, jogadores[i].posicao, jogadores[i].time, jogadores[i].nacionalidade);
+        printf("%02d. %s - %s (%s, %s)\n", i+1, jogadores[i].nome, jogadores[i].posicao, jogadores[i].time, jogadores[i].nacionalidade);
     }
 
-    printf("\nRESERVAS:\n");
+    printf("\n+-----------------------------------------------+\n");
+    printf("|                    RESERVAS                   |\n");
+    printf("+-----------------------------------------------+\n");
     for (int i = 11; i < 22; i++)
     {
         int idx = indices[i];
@@ -279,28 +285,33 @@ int main()
         strcpy(jogadores[i].posicao, posicoes[idx]);
         strcpy(jogadores[i].time, times[idx]);
         strcpy(jogadores[i].nacionalidade, nacionalidades[idx]);
-        printf("%d. %s - %s (%s, %s)\n", i-10, jogadores[i].nome, jogadores[i].posicao,jogadores[i].time, jogadores[i].nacionalidade);
+        printf("%02d. %s - %s (%s, %s)\n", i-10, jogadores[i].nome, jogadores[i].posicao,jogadores[i].time, jogadores[i].nacionalidade);
     }
 
-    printf("\n=================================================\n");
-    printf("   CRIANDO GRAFOS\n");
-    printf("=================================================\n");
+    printf("\n+-----------------------------------------------+\n");
+    printf("|                CRIANDO OS GRAFOS              |\n");
+    printf("+-----------------------------------------------+\n");
 
     GrafoLista* gLista = criarGrafoLista(22, jogadores);
     GrafoMatriz* gMatriz = criarGrafoMatriz(22, jogadores);
 
     conectarPosicoes(gLista, gMatriz, jogadores);
 
-    printf("\nGrafos criados com sucesso!\n");
-
-    printf("GrafoLista\n");
+    printf("+-----------------------------------------------+\n");
+    printf("|                 GRAFO - LISTA                 |\n");
+    printf("+-----------------------------------------------+\n");
+    
     imprimirGrafoLista(gLista);
-    printf("GrafoMatriz\n");
+
+    printf("\n+-----------------------------------------------+\n");
+    printf("|                GRAFO - MATRIZ                 |\n");
+    printf("+-----------------------------------------------+");
+    
     imprimirGrafoMatriz(gMatriz);
 
-    printf("\n=================================================\n");
-    printf("   EXECUTANDO ALGORITMOS\n");
-    printf("=================================================\n");
+    printf("\n+-----------------------------------------------+\n");
+    printf("|            EXECUTANDO OS ALGORITMOS           |\n");
+    printf("+-----------------------------------------------+\n");
 
     // DFS
     dfsLista(gLista, 0);
@@ -323,27 +334,33 @@ int main()
     componentesConexosMatriz(gMatriz);
 
     // Existe Caminho
-    printf("\n=== Existe Caminho (Lista) ===\n");
+    printf("\n+-----------------------------------------------+\n");
+    printf("|              EXISTE CAMINHO - LISTA           |\n");
+    printf("+-----------------------------------------------+\n");
     int existe = existeCaminhoLista(gLista, 0, 21);
     printf("De %s ate %s: %s\n", jogadores[0].nome, jogadores[21].nome, existe ? "SIM" : "NAO");
 
-    printf("\n=== Existe Caminho (Matriz) ===\n");
+    printf("\n+-----------------------------------------------+\n");
+    printf("|             EXISTE CAMINHO - MATRIZ           |\n");
+    printf("+-----------------------------------------------+\n");
     existe = existeCaminhoMatriz(gMatriz, 0, 21);
-    printf("De %s ate %s: %s\n", jogadores[0].nome, jogadores[21].nome, existe ? "SIM" : "NAO");
+    printf("De %s ate %s: %s\n", jogadores[0].nome, jogadores[2].nome, existe ? "SIM" : "NAO");
 
     // Recomendação de Passe
-    recomendarPasseLista(gLista, 5);
-    recomendarPasseMatriz(gMatriz, 5);
+    recomendarPasseLista(gLista, 1);
+    recomendarPasseMatriz(gMatriz, 1);
 
-    printf("\n=================================================\n");
-    printf("   FINALIZANDO\n");
-    printf("=================================================\n");
+    printf("\n+-----------------------------------------------+\n");
+    printf("|              FINALIZANDO SISTEMA              |\n");
+    printf("+-----------------------------------------------+\n");
 
     liberarGrafoLista(gLista);
     liberarGrafoMatriz(gMatriz);
     free(jogadores);
 
-    printf("\nPrograma finalizado com sucesso!\n");
+    printf("\n+-----------------------------------------------+\n");
+    printf("|                  FINALIZADO!                  |\n");
+    printf("+-----------------------------------------------+\n");
 
     return 0;
 }

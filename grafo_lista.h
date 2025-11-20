@@ -27,7 +27,7 @@ void adicionarArestaLista(GrafoLista* g, int src, int dest, float peso);
 
 //Funções de busca em profundidade e largura
 void dfsLista(GrafoLista* g, int inicio);
-void dfsRecursivoLista(GrafoLista* g,int v,int* visitado);
+void dfsRecursivoLista(GrafoLista* g, int v, int* visitado, int nivel);
 void bfsLista(GrafoLista* g, int inicio);
 
 //Algoritmos de caminho mínimo e árvore geradora mínima

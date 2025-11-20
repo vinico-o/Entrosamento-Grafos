@@ -54,18 +54,26 @@ void liberarGrafoMatriz(GrafoMatriz* g)
 }
 
 // dfs recursivo 
-void dfsRecursivoMatriz(GrafoMatriz* g, int v, int* visitado)
+// função recursiva da DFS (matriz)
+void dfsRecursivoMatriz(GrafoMatriz* g, int v, int* visitado, int nivel)
 {
+    // marca o vértice como visitado
     visitado[v] = 1;
     
-    printf("%s (%s) -> ", g->jogadores[v].nome, g->jogadores[v].posicao);
+    // imprime com indentação de árvore
+    for(int i = 0; i < nivel; i++)
+        printf("   ");
 
+    printf("|-> %s (%s)\n", g->jogadores[v].nome, g->jogadores[v].posicao);
+
+    // percorre todos os vértices para achar vizinhos
     for (int i = 0; i < g->numVertices; i++)
     {
         // percorre pelos vizinhos nao visitados
         if (g->matriz[v][i] > 0 && !visitado[i])
         {
-            dfsRecursivoMatriz(g, i, visitado);
+            // chamada recursiva para o vizinho
+            dfsRecursivoMatriz(g, i, visitado, nivel + 1);
         }
     }
 }
@@ -73,13 +81,13 @@ void dfsRecursivoMatriz(GrafoMatriz* g, int v, int* visitado)
 // dfs - busca em profundidade
 void dfsMatriz(GrafoMatriz* g, int inicio)
 {
-    printf("\n=== DFS (Matriz) iniciando em %s ===\n", g->jogadores[inicio].nome);
+    printf("\nDFS (Matriz) iniciando em %s\n", g->jogadores[inicio].nome);
     
     // criando o vetor auxiliar 'visitado'
     int* visitado = (int*)calloc(g->numVertices, sizeof(int));
     
-    // realizando busca dfs
-    dfsRecursivoMatriz(g, inicio, visitado);
+    // realizando busca dfs (nível inicial = 0)
+    dfsRecursivoMatriz(g, inicio, visitado, 0);
     
     printf("FIM\n");
     
@@ -87,10 +95,24 @@ void dfsMatriz(GrafoMatriz* g, int inicio)
     free(visitado);
 }
 
+void imprimeArvoreRecursiva(GrafoMatriz* g, int v, int* pai, int nivel)
+{
+    for(int k = 0; k < nivel; k++)
+        printf("   ");
+
+    printf("|-> %s (%s)\n", g->jogadores[v].nome, g->jogadores[v].posicao);
+
+    for(int i = 0; i < g->numVertices; i++)
+    {
+        if(pai[i] == v)
+            imprimeArvoreRecursiva(g, i, pai, nivel + 1);
+    }
+}
+
 // bfs - busca em largura
 void bfsMatriz(GrafoMatriz* g, int inicio)
 {
-    printf("\n=== BFS (Matriz) iniciando em %s ===\n", g->jogadores[inicio].nome);
+    printf("\nBFS (Matriz) iniciando em %s\n", g->jogadores[inicio].nome);
     
     // criiando o vetor auxiliar 'visitado'
     int* visitado = (int*)calloc(g->numVertices, sizeof(int));
@@ -99,6 +121,10 @@ void bfsMatriz(GrafoMatriz* g, int inicio)
     int* fila = (int*)malloc(g->numVertices * sizeof(int));
     
     int frente = 0, tras = 0;
+
+    int* pai = malloc(g->numVertices * sizeof(int));
+    for(int i = 0; i < g->numVertices; i++)
+        pai[i] = -1;
 
     // marcando o primeiro como visitado
     visitado[inicio] = 1;
@@ -110,8 +136,6 @@ void bfsMatriz(GrafoMatriz* g, int inicio)
     {
         // pegando o primeiro da fila
         int v = fila[frente++];
-        
-        printf("%s (%s) -> ", g->jogadores[v].nome, g->jogadores[v].posicao);
 
         // percorrendo os vizinhos
         for(int i = 0; i < g->numVertices; i++)
@@ -120,19 +144,27 @@ void bfsMatriz(GrafoMatriz* g, int inicio)
             if (g->matriz[v][i] > 0 && !visitado[i])
             {
                 visitado[i] = 1;
+                pai[i] = v;
                 fila[tras++] = i;
             }
         }
     }
     
-    printf("FIM\n");
-    
+    printf("%s (%s)\n", g->jogadores[inicio].nome, g->jogadores[inicio].posicao);
+
+    for(int i = 0; i < g->numVertices; i++)
+    {
+        if(pai[i] == inicio)
+            imprimeArvoreRecursiva(g, i, pai, 0);
+    }
 
     // liberando os vetores visitado e fila
     free(visitado);
     
     free(fila);
+    free(pai);
 }
+
 
 // estrutura de dados para o min-heap (Dijkstra e Prim)
 typedef struct
@@ -252,10 +284,23 @@ HeapNoMatriz extrairMinMatriz(MinHeapMatriz* h)
     return min;
 }
 
+void imprimirRecursivoDijkstraMatriz(GrafoMatriz* g, int* ant, int atual, int nivel)
+{
+    for(int i = 0; i < nivel; i++)
+        printf(" ");
+
+    printf("|-> %s (%s)\n", g->jogadores[atual].nome, g->jogadores[atual].posicao);
+
+    for(int i = 0; i < g->numVertices; i++)
+        if(ant[i] == atual)
+            imprimirRecursivoDijkstraMatriz(g, ant, i, nivel + 2);
+}
+
+
 // dijkstra -> caminho minimo entre dois vertices(jogadores)
 void dijkstraMatriz(GrafoMatriz* g, int inicio, int fim)
 {
-    printf("\n=== Dijkstra (Matriz) de %s ate %s ===\n", g->jogadores[inicio].nome, g->jogadores[fim].nome);
+    printf("\nDijkstra (Matriz) de %s ate %s\n", g->jogadores[inicio].nome, g->jogadores[fim].nome);
 
     // criando o vetor distancia
     float* dist = (float*)malloc(g->numVertices * sizeof(float));
@@ -310,36 +355,7 @@ void dijkstraMatriz(GrafoMatriz* g, int inicio, int fim)
         }
     }
 
-    // imprimindo o resultado
-    if (dist[fim] == FLT_MAX)
-    {
-        printf("Nao ha caminho!\n");
-    } 
-    
-    else
-    {
-        printf("Distancia: %.2f\n", dist[fim]);
-        
-        printf("Caminho: ");
-        
-        int caminho[22], tam = 0;
-        
-        // reconstruindo o caminho
-        for (int v = fim; v != -1; v = ant[v])
-        {
-            caminho[tam++] = v;
-        }
-        
-        // imprimindo o caminho invertido
-        for (int i = tam - 1; i >= 0; i--)
-        {
-            printf("%s", g->jogadores[caminho[i]].nome);
-            if (i > 0) printf(" -> ");
-        }
-
-        printf("\n");
-    }
-
+    imprimirRecursivoDijkstraMatriz(g, ant, inicio, 0);
 
     // free nos vetores e estruturas 
 
@@ -358,7 +374,7 @@ void dijkstraMatriz(GrafoMatriz* g, int inicio, int fim)
 // prim -> gera a arvore geradora minima
 void primMatriz(GrafoMatriz* g)
 {
-    printf("\n=== Arvore Geradora Minima - Prim (Matriz) ===\n");
+    printf("\nArvore Geradora Minima - Prim (Matriz)\n");
 
     // criando o vetor inMST (se o vertice ja esta na MST)
     int* inMST = (int*)calloc(g->numVertices, sizeof(int));
@@ -400,7 +416,7 @@ void primMatriz(GrafoMatriz* g)
 
         if (pai[u] != -1)
         {
-            printf("%s -- %.2f -- %s\n", g->jogadores[pai[u]].nome, chave[u], g->jogadores[u].nome);
+            printf("%-25s -- %.2f -- %25s\n", g->jogadores[pai[u]].nome, chave[u], g->jogadores[u].nome);
             
             pesoTotal += chave[u];
         }
@@ -440,7 +456,7 @@ void primMatriz(GrafoMatriz* g)
 // componentes conexas - indica as componentes ("grupos") conexas do grafo 
 void componentesConexosMatriz(GrafoMatriz* g)
 {
-    printf("\n=== Componentes Conexos (Matriz) ===\n");
+    printf("\nComponentes Conexos (Matriz)\n");
 
     int* visitado = (int*)calloc(g->numVertices, sizeof(int));
     
@@ -466,7 +482,7 @@ void componentesConexosMatriz(GrafoMatriz* g)
             {
                 int v = fila[frente++];
                 
-                printf("%s ", g->jogadores[v].nome);
+                printf("%s - ", g->jogadores[v].nome);
 
                 for (int j = 0; j < g->numVertices; j++)
                 {
@@ -551,7 +567,7 @@ int existeCaminhoMatriz(GrafoMatriz* g, int inicio, int fim)
 // recomendacao de passe -> sugere o melhor passe baseado no menor peso (maior entrosamento)
 void recomendarPasseMatriz(GrafoMatriz* g, int jogador)
 {
-    printf("\n=== Recomendacao de Passe (Matriz) para %s ===\n", g->jogadores[jogador].nome);
+    printf("\nRecomendacao de Passe (Matriz) para %s (%s)\n", g->jogadores[jogador].nome, g->jogadores[jogador].posicao);
 
     float melhorPeso = FLT_MAX;
 
@@ -570,7 +586,7 @@ void recomendarPasseMatriz(GrafoMatriz* g, int jogador)
 
     if (melhor != -1)
     {
-        printf("Melhor passe: %s (entrosamento: %.2f)\n", g->jogadores[melhor].nome, 1.0 / melhorPeso);
+        printf("Melhor passe: %s (%s)(entrosamento: %.2f)\n", g->jogadores[melhor].nome, g->jogadores[jogador].posicao, 1.0 / melhorPeso);
     } 
     
     else
@@ -581,18 +597,19 @@ void recomendarPasseMatriz(GrafoMatriz* g, int jogador)
 
 void imprimirGrafoMatriz(GrafoMatriz* g)
 {
-    printf("\n=== Imprimindo Grafo (Matriz) ===\n");
+    printf("\n    0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21\n");
     for(int i = 0; i < g->numVertices; i++)
     {
+        printf("%02d ", i);
         for(int j = 0; j < g->numVertices; j++)
         {
             if(g->matriz[i][j] > 0)
             {
-                printf("-- ");
+                printf("%.1f ", g->matriz[i][j]);
             }
             else
             {
-                printf("00 ");
+                printf("--- ");
             }
         }
         printf("\n");

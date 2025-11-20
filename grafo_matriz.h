@@ -17,7 +17,7 @@ void liberarGrafoMatriz(GrafoMatriz* g);
 
 // algoritmos especificos
 void dfsMatriz(GrafoMatriz* g, int inicio);
-void bfsMatriz(GrafoMatriz* g, int inicio);
+void dfsRecursivoMatriz(GrafoMatriz* g, int v, int* visitado, int nivel);
 void dijkstraMatriz(GrafoMatriz* g, int inicio, int fim);
 void primMatriz(GrafoMatriz* g);
 void componentesConexosMatriz(GrafoMatriz* g);

@@ -54,68 +54,105 @@ void liberarGrafoLista(GrafoLista* g)
 //começa a DFS a partir do vértice da origem
 void dfsLista(GrafoLista* g, int inicio)
 {
-    printf("\n=== DFS (Lista) iniciando em %s ===\n",g->jogadores[inicio].nome);
-    //vetor para marcar visitados
+    printf("\nDFS (Lista) iniciando em %s\n", g->jogadores[inicio].nome);
+
     int* visitado = calloc(g->numVertices, sizeof(int));
-    dfsRecursivoLista(g, inicio, visitado);
+    dfsRecursivoLista(g, inicio, visitado, 0);
+
     printf("FIM\n");
     free(visitado);
 }
-//Percorre todos os vértices alcançaveis a partir de v e os imprime
-void dfsRecursivoLista(GrafoLista* g,int v,int* visitado)
+
+void dfsRecursivoLista(GrafoLista* g, int v, int* visitado, int nivel) // utilizamos o nivel para deixar mais legivel
 {
-    //se visitado é marcado
     visitado[v] = 1;
-    printf("%s (%s) -> ", g->jogadores[v].nome, g->jogadores[v].posicao);
-    
+
+    // indentação visual
+    for (int i = 0; i < nivel; i++)
+        printf("   ");
+
+    printf("|-> %s (%s)\n", g->jogadores[v].nome, g->jogadores[v].posicao);
+
     No* adj = g->lista[v].cabeca;
-    //Percorre todos os vizinhos
-    while(adj)
+
+    while (adj)
     {
-        if(!visitado[adj->destino])
+        if (!visitado[adj->destino])
         {
-            //Chamada para o vizinho não visitado
-            dfsRecursivoLista(g, adj->destino, visitado);
+            dfsRecursivoLista(g, adj->destino, visitado, nivel + 1);
         }
         adj = adj->prox;
     }
 }
+
 //Percorre o grafo e imprime a BFS
-void bfsLista(GrafoLista* g,int s)
+// Função recursiva para imprimir a árvore BFS
+void imprimirRecursivoLista(GrafoLista* g, int* pai, int vertice_atual, int nivel)
 {
-    printf("\n=== BFS (Lista) iniciando em %s ===\n", g->jogadores[s].nome);
+    // imprime espaços para representar o nível da árvore
+    for(int i = 0; i < nivel; i++)
+        printf(" ");
+
+    // imprime o jogador
+    printf("|-> %s (%s)\n", g->jogadores[vertice_atual].nome,
+                           g->jogadores[vertice_atual].posicao);
+
+    // percorre todos os vértices e imprime quem tem o pai igual ao vértice atual
+    for(int i = 0; i < g->numVertices; i++)
+    {
+        if(pai[i] == vertice_atual)
+            imprimirRecursivoLista(g, pai, i, nivel + 2);
+    }
+}
+
+void bfsLista(GrafoLista* g, int s)
+{
+    printf("\nBFS (Lista) iniciando em %s\n", g->jogadores[s].nome);
 
     //inicializa as estruturas
     int* visitado = calloc(g->numVertices, sizeof(int));
     int* fila = malloc(g->numVertices * sizeof(int));
+    int* pai = malloc(g->numVertices * sizeof(int));   // <-- novo: vetor de pais
     int frente = 0, tras = 0;
-    
+
+    // inicializa pais com -1
+    for(int i = 0; i < g->numVertices; i++)
+        pai[i] = -1;
+
     visitado[s] = 1;
     fila[tras++] = s;
-    
+
     //Enquanto a fila não estiver vazia ele continua
-    while(frente<tras)
+    while(frente < tras)
     {
-        //Tira da fila e printa o vértice
+        //Tira da fila
         int v = fila[frente++];
-        printf("%s (%s) -> ", g->jogadores[v].nome, g->jogadores[v].posicao);
-        
+
         No* adj = g->lista[v].cabeca;
         while(adj)
         {
-            //Se ele anda não foi visitado, marca como visitado e coloca na fila
+            //Se ele ainda não foi visitado, marca como visitado e coloca na fila
             if(!visitado[adj->destino])
             {
                 visitado[adj->destino] = 1;
+                pai[adj->destino] = v;        // <-- registra pai para a árvore BFS
                 fila[tras++] = adj->destino;
             }
             adj = adj->prox;
         }
     }
+
+    // Agora imprimimos a árvore BFS recursivamente
+    imprimirRecursivoLista(g, pai, s, 0);
+
     printf("FIM\n");
+
     free(visitado);
     free(fila);
+    free(pai);
 }
+
+
 
 //Funções do heap para usa nos algoritmos dijktra e Prim
 MinHeapLista* criarHeapLista(int capacidade)
@@ -193,46 +230,69 @@ HeapNoLista extrairMinLista(MinHeapLista* h)
     return min;
 }
 
+// Impressao recursiva da árvore do Dijkstra
+void imprimirRecursivoDijkstraLista(GrafoLista* g, int* pai, int vertice_atual, int nivel)
+{
+    // identação por nível
+    for(int i = 0; i < nivel; i++)
+        printf(" ");
+
+    printf("|-> %s (%s)\n",
+        g->jogadores[vertice_atual].nome,
+        g->jogadores[vertice_atual].posicao);
+
+    // percorre todos os vértices procurando filhos
+    for(int i = 0; i < g->numVertices; i++)
+    {
+        if(pai[i] == vertice_atual)
+            imprimirRecursivoDijkstraLista(g, pai, i, nivel + 2);
+    }
+}
+
+
 // Djikstra com estruturas estaticas (para simplificar)
 void dijkstraLista(GrafoLista* g,int inicio,int fim)
 {
-    printf("\n=== Dijkstra (Lista) de %s ate %s ===\n",g->jogadores[inicio].nome, g->jogadores[fim].nome);
-    
+    printf("\nDijkstra (Lista) de %s ate %s\n",
+        g->jogadores[inicio].nome,
+        g->jogadores[fim].nome);
+
     float* dist = malloc(g->numVertices * sizeof(float));
     int* pai = malloc(g->numVertices * sizeof(int));
     int* visitado = calloc(g->numVertices, sizeof(int));
+
     //Inicializa as distâncias e o vetor pai
-    for(int i=0;i<g->numVertices;i++)
+    for(int i = 0; i < g->numVertices; i++)
     {
         dist[i] = FLT_MAX;
         pai[i] = -1;
     }
+
     //Distância do nó inicial para ele msm é 0
     dist[inicio] = 0.0;
-    
+
     MinHeapLista* h = criarHeapLista(g->numVertices * 10);
-    inserirHeapLista(h,inicio, 0.0);
-    
-    while(h->tamanho>0)
+    inserirHeapLista(h, inicio, 0.0);
+
+    while(h->tamanho > 0)
     {
         //Pega o nó com menor distância
         HeapNoLista atual = extrairMinLista(h);
         int u = atual.vertice;
+
         //Se já foi visitado ele pula para o proximo da fila
         if(visitado[u]) 
-        {
             continue;
-        }
+
         visitado[u] = 1;
-        
+
         No* adj = g->lista[u].cabeca;
-        //Basicamente vamos ver se o camimho para ir a 'u' por 'v' é melhor que o menor que
-        //conhecemos até agora para u
+
+        // relaxamento
         while(adj)
         {
             //cmp a dist (do menor peso) + o peso do atual com a prioridade atual do destino
-            //adj->destino(menor dist conhecida da fila) para aquele caminho
-            if(!visitado[adj->destino] && dist[u]+adj->peso<dist[adj->destino])
+            if(!visitado[adj->destino] && dist[u] + adj->peso < dist[adj->destino])
             {
                 //Se for menor att a prioridade do heap e define o pai
                 dist[adj->destino] = dist[u] + adj->peso;
@@ -242,42 +302,28 @@ void dijkstraLista(GrafoLista* g,int inicio,int fim)
             adj = adj->prox;
         }
     }
-    
+
+    // se não há caminho
     if(dist[fim] == FLT_MAX)
     {
         printf("Nao ha caminho!\n");
         return;
-    } 
-    else
-    {
-        printf("Distancia: %.2f\n", dist[fim]);
-        printf("Caminho: ");
-        int caminho[22],tam = 0;
-        for(int v=fim;v!=-1;v=pai[v])
-        {
-            caminho[tam] = v;
-            tam++;
-        }
-        for(int i=tam-1;i>=0;i--)
-        {
-            printf("%s", g->jogadores[caminho[i]].nome);
-            if(i>0) 
-            {
-                printf(" -> ");
-            }
-        }
-        printf("\n");
     }
+
+    // Impressão total da ÁRVORE de Dijkstra
+    imprimirRecursivoDijkstraLista(g, pai, inicio, 0);
+
     free(dist);
     free(pai);
     free(visitado);
     free(h->array);
     free(h);
 }
+
 //Algoritmo de Prim para árvore geradora mínima (MST) em estrutura estatica (para simplificar)
 void primLista(GrafoLista* g)
 {
-    printf("\n=== Arvore Geradora Minima - Prim (Lista) ===\n");
+    printf("\nArvore Geradora Minima - Prim (Lista)\n");
     //Inicialização
     int* incluidoMST = calloc(g->numVertices, sizeof(int));
     float* chave = malloc(g->numVertices * sizeof(float));
@@ -309,7 +355,7 @@ void primLista(GrafoLista* g)
         
         if(pai[u]!=-1)
         {
-            printf("%s -- %.2f -- %s\n", g->jogadores[pai[u]].nome, chave[u], g->jogadores[u].nome);
+            printf("%-25s -- %.2f -- %25s\n", g->jogadores[pai[u]].nome, chave[u], g->jogadores[u].nome);
             pesoTotal += chave[u];
         }
         
@@ -340,7 +386,7 @@ void primLista(GrafoLista* g)
 //Acha e imprime os componentes conexos do grafo
 void componentesConexosLista(GrafoLista* g)
 {
-    printf("\n=== Componentes Conexos (Lista) ===\n");
+    printf("\nComponentes Conexos (Lista)\n");
     
     int* visitado = calloc(g->numVertices, sizeof(int));
     int numComponentes=0;
@@ -362,7 +408,7 @@ void componentesConexosLista(GrafoLista* g)
             while(frente < tras)
             {
                 int v = fila[frente++];
-                printf("%s ", g->jogadores[v].nome);
+                printf("%s - ", g->jogadores[v].nome);
                 
                 No* adj = g->lista[v].cabeca;
                 while(adj)
@@ -432,7 +478,7 @@ int existeCaminhoLista(GrafoLista* g, int inicio, int fim)
 //Recomenda o melhor passe para um jogador baseado no menor peso (maior entrosamento)
 void recomendarPasseLista(GrafoLista* g, int jogador)
 {
-    printf("\n=== Recomendacao de Passe (Lista) para %s ===\n",g->jogadores[jogador].nome);
+    printf("\nRecomendacao de Passe (Lista) para %s (%s)\n",g->jogadores[jogador].nome, g->jogadores[jogador].posicao);
     
     float melhorPeso=FLT_MAX;
     int melhor = -1;
@@ -451,7 +497,7 @@ void recomendarPasseLista(GrafoLista* g, int jogador)
     //Imprime o melhor passe encontrado
     if (melhor != -1)
     {
-        printf("Melhor passe: %s (entrosamento: %.2f)\n",g->jogadores[melhor].nome, 1.0 / melhorPeso);
+        printf("Melhor passe: %s (%s) (entrosamento: %.2f)\n",g->jogadores[melhor].nome, g->jogadores[jogador].posicao, 1.0 / melhorPeso);
     }
     //Se não houver vizinhos
     else
@@ -462,14 +508,13 @@ void recomendarPasseLista(GrafoLista* g, int jogador)
 
 void imprimirGrafoLista(GrafoLista* g)
 {
-    printf("\n=== Imprimindo Grafo (Lista) ===\n");
     for(int i=0;i<g->numVertices;i++)
     {
-        printf("%d: ", g->jogadores[i].id);
+        printf("%02d:", g->jogadores[i].id);
         No* adj = g->lista[i].cabeca;
         while(adj)
         {
-            printf("%d ", g->jogadores[adj->destino].id);
+            printf(" -> (%d, %.2f)", g->jogadores[adj->destino].id, adj->peso);
             adj = adj->prox;
         }
         printf("\n");
