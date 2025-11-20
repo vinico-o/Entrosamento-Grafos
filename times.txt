@@ -1,30 +1,311 @@
-Liverpool
-Manchester City
-PSG
-Chelsea
-Real Madrid
-Juventus
-Chelsea
-Real Madrid
-Liverpool
-Manchester United
-Newcastle
-West Ham
-PSG
-Real Madrid
-Barcelona
-Tottenham
-Arsenal
-Manchester United
-Real Madrid
+Criciúma
+Criciúma
+Criciúma
+Criciúma
+Criciúma
+Criciúma
+Criciúma
+Criciúma
+Criciúma
+Criciúma
+Criciúma
+Criciúma
+Criciúma
+Criciúma
+Criciúma
+Criciúma
+Juventude
+Juventude
+Juventude
+Juventude
+Juventude
+Juventude
+Juventude
+Juventude
+Juventude
+Juventude
+Juventude
+Juventude
+Juventude
+Juventude
+Juventude
+Internacional
+Internacional
+Internacional
+Internacional
+Internacional
+Internacional
+Internacional
+Internacional
+Internacional
+Internacional
+Internacional
+Internacional
+Internacional
+Internacional
+Internacional
+Internacional
+Bahia
+Bahia
+Bahia
+Bahia
+Bahia
+Bahia
+Bahia
+Bahia
+Bahia
+Bahia
+Bahia
+Bahia
+Bahia
+Bahia
+Bahia
+Athletico Paranaense
+Athletico Paranaense
+Athletico Paranaense
+Athletico Paranaense
+Athletico Paranaense
+Athletico Paranaense
+Athletico Paranaense
+Athletico Paranaense
+Athletico Paranaense
+Athletico Paranaense
+Athletico Paranaense
+Athletico Paranaense
+Athletico Paranaense
+Athletico Paranaense
+Athletico Paranaense
+Athletico Paranaense
+Cuiabá
+Cuiabá
+Cuiabá
+Cuiabá
+Cuiabá
+Cuiabá
+Cuiabá
+Cuiabá
+Cuiabá
+Cuiabá
+Cuiabá
+Cuiabá
+Cuiabá
+Cuiabá
+Cuiabá
+Cuiabá
+Vasco da Gama
+Vasco da Gama
+Vasco da Gama
+Vasco da Gama
+Vasco da Gama
+Vasco da Gama
+Vasco da Gama
+Vasco da Gama
+Vasco da Gama
+Vasco da Gama
+Vasco da Gama
+Vasco da Gama
+Vasco da Gama
+Vasco da Gama
+Vasco da Gama
+Vasco da Gama
+Grêmio
+Grêmio
+Grêmio
+Grêmio
+Grêmio
+Grêmio
+Grêmio
+Grêmio
+Grêmio
+Grêmio
+Grêmio
+Grêmio
+Grêmio
+Grêmio
+Corinthians
+Corinthians
+Corinthians
+Corinthians
+Corinthians
+Corinthians
+Corinthians
+Corinthians
+Corinthians
+Corinthians
+Corinthians
+Corinthians
+Corinthians
+Corinthians
+Corinthians
+Corinthians
+Atlético Mineiro
+Atlético Mineiro
+Atlético Mineiro
+Atlético Mineiro
+Atlético Mineiro
+Atlético Mineiro
+Atlético Mineiro
+Atlético Mineiro
+Atlético Mineiro
+Atlético Mineiro
+Atlético Mineiro
+Atlético Mineiro
+Atlético Mineiro
+Atlético Mineiro
+Atlético Goianiense
+Atlético Goianiense
+Atlético Goianiense
+Atlético Goianiense
+Atlético Goianiense
+Atlético Goianiense
+Atlético Goianiense
+Atlético Goianiense
+Atlético Goianiense
+Atlético Goianiense
+Atlético Goianiense
+Atlético Goianiense
+Atlético Goianiense
+Atlético Goianiense
+Atlético Goianiense
 Flamengo
-Arsenal
-Atletico Madrid
-Juventus
-Atletico Madrid
-Sevilla
-Aston Villa
 Flamengo
 Flamengo
-Atletico Madrid
 Flamengo
+Flamengo
+Flamengo
+Flamengo
+Flamengo
+Flamengo
+Flamengo
+Flamengo
+Flamengo
+Flamengo
+Flamengo
+Flamengo
+Flamengo
+Cruzeiro
+Cruzeiro
+Cruzeiro
+Cruzeiro
+Cruzeiro
+Cruzeiro
+Cruzeiro
+Cruzeiro
+Cruzeiro
+Cruzeiro
+Cruzeiro
+Cruzeiro
+Cruzeiro
+Cruzeiro
+Cruzeiro
+Cruzeiro
+Cruzeiro
+Botafogo
+Botafogo
+Botafogo
+Botafogo
+Botafogo
+Botafogo
+Botafogo
+Botafogo
+Botafogo
+Botafogo
+Botafogo
+Botafogo
+Botafogo
+Botafogo
+Botafogo
+Botafogo
+Vitória
+Vitória
+Vitória
+Vitória
+Vitória
+Vitória
+Vitória
+Vitória
+Vitória
+Vitória
+Vitória
+Vitória
+Vitória
+Vitória
+Vitória
+Vitória
+Palmeiras
+Palmeiras
+Palmeiras
+Palmeiras
+Palmeiras
+Palmeiras
+Palmeiras
+Palmeiras
+Palmeiras
+Palmeiras
+Palmeiras
+Palmeiras
+Palmeiras
+Palmeiras
+Palmeiras
+Palmeiras
+Fluminense
+Fluminense
+Fluminense
+Fluminense
+Fluminense
+Fluminense
+Fluminense
+Fluminense
+Fluminense
+Fluminense
+Fluminense
+Fluminense
+Fluminense
+Fluminense
+Fluminense
+Red Bull Bragantino
+Red Bull Bragantino
+Red Bull Bragantino
+Red Bull Bragantino
+Red Bull Bragantino
+Red Bull Bragantino
+Red Bull Bragantino
+Red Bull Bragantino
+Red Bull Bragantino
+Red Bull Bragantino
+Red Bull Bragantino
+Red Bull Bragantino
+Red Bull Bragantino
+Red Bull Bragantino
+Red Bull Bragantino
+Red Bull Bragantino
+São Paulo
+São Paulo
+São Paulo
+São Paulo
+São Paulo
+São Paulo
+São Paulo
+São Paulo
+São Paulo
+São Paulo
+São Paulo
+São Paulo
+São Paulo
+São Paulo
+Fortaleza
+Fortaleza
+Fortaleza
+Fortaleza
+Fortaleza
+Fortaleza
+Fortaleza
+Fortaleza
+Fortaleza
+Fortaleza
+Fortaleza
+Fortaleza
+Fortaleza
+Fortaleza
+Fortaleza
+Fortaleza
