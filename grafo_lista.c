@@ -193,6 +193,7 @@ HeapNoLista extrairMinLista(MinHeapLista* h)
     return min;
 }
 
+// Djikstra com estruturas estaticas (para simplificar)
 void dijkstraLista(GrafoLista* g,int inicio,int fim)
 {
     printf("\n=== Dijkstra (Lista) de %s ate %s ===\n",g->jogadores[inicio].nome, g->jogadores[fim].nome);
@@ -273,7 +274,7 @@ void dijkstraLista(GrafoLista* g,int inicio,int fim)
     free(h->array);
     free(h);
 }
-//Algoritmo de Prim para árvore geradora mínima (MST)
+//Algoritmo de Prim para árvore geradora mínima (MST) em estrutura estatica (para simplificar)
 void primLista(GrafoLista* g)
 {
     printf("\n=== Arvore Geradora Minima - Prim (Lista) ===\n");
@@ -383,6 +384,7 @@ void componentesConexosLista(GrafoLista* g)
     printf("Total de componentes: %d\n", numComponentes);
     free(visitado);
 }
+
 //Verifica se existe caminho entre dois vértices
 int existeCaminhoLista(GrafoLista* g, int inicio, int fim)
 {
@@ -455,5 +457,21 @@ void recomendarPasseLista(GrafoLista* g, int jogador)
     else
     {
         printf("Nenhum vizinho disponivel!\n");
+    }
+}
+
+void imprimirGrafoLista(GrafoLista* g)
+{
+    printf("\n=== Imprimindo Grafo (Lista) ===\n");
+    for(int i=0;i<g->numVertices;i++)
+    {
+        printf("%d: ", g->jogadores[i].id);
+        No* adj = g->lista[i].cabeca;
+        while(adj)
+        {
+            printf("%d ", g->jogadores[adj->destino].id);
+            adj = adj->prox;
+        }
+        printf("\n");
     }
 }

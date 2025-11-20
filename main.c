@@ -48,99 +48,177 @@ float calcularPeso(Jogador* j1, Jogador* j2)
     return 1.0 / entrosamento;
 }
 
-void conectarPosicoes(GrafoLista* grafoLista, GrafoMatriz* grafoMatriz, Jogador* jogadores, int n)
+void conectarPosicoes(GrafoLista* grafoLista, GrafoMatriz* grafoMatriz, Jogador* jogadores)
 {
-    // tamanho 22 para o caso em que todos os jogadores sejam da mesma posicao
-    int goleiros[22], defensores[22], meios[22], atacantes[22];
-    // contador de cada posicao
-    int numGoleiros = 0, numDefensores = 0, numMeios = 0, numAtacantes = 0;
 
-    for(int i = 0; i < n; i++)
-    {
-        if(strcmp(jogadores[i].posicao, "GOL") == 0)
-        {
-            goleiros[numGoleiros++] = i;
-        }
-        else if(strcmp(jogadores[i].posicao, "ZE") == 0 || strcmp(jogadores[i].posicao, "ZD") ||
-                strcmp(jogadores[i].posicao, "LE") == 0 || strcmp(jogadores[i].posicao, "LD") == 0)
-        {
-            defensores[numDefensores++] = i;
-        }
-        else if(strcmp(jogadores[i].posicao, "MC") == 0 || strcmp(jogadores[i].posicao, "ME") == 0 || strcmp(jogadores[i].posicao, "MD") == 0)
-        {
-            meios[numMeios++] = i;
-        }
-        else if(strcmp(jogadores[i].posicao, "PD") == 0 || strcmp(jogadores[i].posicao, "CA") == 0 || strcmp(jogadores[i].posicao, "PE") == 0)
-        {
-            atacantes[numAtacantes++] = i;
-        }
-    }
+    /*
+        0 - gol     11 - gol2
+        1 - le      12 - le2
+        2 - ze      13 - ze2
+        3 - zd      14 - zd2
+        4 - ld      15 - ld2
+        5 - me      16 - me2
+        6 - mc      17 - mc2
+        7 - md      18 - md2
+        8 - pe      19 - pe2
+        9 - ca      20 - ca2
+        10 - pd     21 - pd2
+    */
+    float peso;
+    //gol
+    peso = calcularPeso(&jogadores[0], &jogadores[2]);
+    adicionarArestaLista(grafoLista, 0, 2, peso);
+    adicionarArestaMatriz(grafoMatriz, 0, 2, peso);
 
-    // Conectar goleiros com defensores
-    for(int i = 0; i < numGoleiros; i++) 
-    {
-        for (int j = 0; j < numDefensores; j++)
-        {
-            float peso = calcularPeso(&jogadores[goleiros[i]], &jogadores[defensores[j]]);
-            adicionarArestaLista(grafoLista, goleiros[i], defensores[j], peso);
-            adicionarArestaMatriz(grafoMatriz, goleiros[i], defensores[j], peso);
-        }
-    }
+    peso = calcularPeso(&jogadores[0], &jogadores[3]);
+    adicionarArestaLista(grafoLista, 0, 3, peso);
+    adicionarArestaMatriz(grafoMatriz, 0, 3, peso);
 
-    // Conectar defensores entre si
-    for(int i = 0; i < numDefensores; i++)
-    {
-        for (int j = i + 1; j < numDefensores; j++)
-        {
-            float peso = calcularPeso(&jogadores[defensores[i]], &jogadores[defensores[j]]);
-            adicionarArestaLista(grafoLista, defensores[i], defensores[j], peso);
-            adicionarArestaMatriz(grafoMatriz, defensores[i], defensores[j], peso);
-        }
-    }
+    //le
+    peso = calcularPeso(&jogadores[1], &jogadores[2]);
+    adicionarArestaLista(grafoLista, 1, 2, peso);
+    adicionarArestaMatriz(grafoMatriz, 1, 2, peso);
 
-    // Conectar defensores com meios
-    for(int i = 0; i < numDefensores; i++)
-    {
-        for (int j = 0; j < numMeios; j++)
-        {
-            float peso = calcularPeso(&jogadores[defensores[i]], &jogadores[meios[j]]);
-            adicionarArestaLista(grafoLista, defensores[i], meios[j], peso);
-            adicionarArestaMatriz(grafoMatriz, defensores[i], meios[j], peso);
-        }
-    }
+    peso = calcularPeso(&jogadores[1], &jogadores[5]);
+    adicionarArestaLista(grafoLista, 1, 5, peso);
+    adicionarArestaMatriz(grafoMatriz, 1, 5, peso);
 
-    // Conectar meios entre si
-    for(int i = 0; i < numMeios; i++)
-    {
-        for (int j = i + 1; j < numMeios; j++)
-        {
-            float peso = calcularPeso(&jogadores[meios[i]], &jogadores[meios[j]]);
-            adicionarArestaLista(grafoLista, meios[i], meios[j], peso);
-            adicionarArestaMatriz(grafoMatriz, meios[i], meios[j], peso);
-        }
-    }
+    //ze
+    peso = calcularPeso(&jogadores[2], &jogadores[3]);
+    adicionarArestaLista(grafoLista, 2, 3, peso);
+    adicionarArestaMatriz(grafoMatriz, 2, 3, peso);
 
-    // Conectar meios com atacantes
-    for(int i = 0; i < numMeios; i++)
-    {
-        for (int j = 0; j < numAtacantes; j++)
-        {
-            float peso = calcularPeso(&jogadores[meios[i]], &jogadores[atacantes[j]]);
-            adicionarArestaLista(grafoLista, meios[i], atacantes[j], peso);
-            adicionarArestaMatriz(grafoMatriz, meios[i], atacantes[j], peso);
-        }
-    }
+    peso = calcularPeso(&jogadores[2], &jogadores[5]);
+    adicionarArestaLista(grafoLista, 2, 5, peso);
+    adicionarArestaMatriz(grafoMatriz, 2, 5, peso);
 
-    // Conectar atacantes entre si
-    for(int i = 0; i < numAtacantes; i++)
-    {
-        for (int j = i + 1; j < numAtacantes; j++)
-        {
-            float peso = calcularPeso(&jogadores[atacantes[i]], &jogadores[atacantes[j]]);
-            adicionarArestaLista(grafoLista, atacantes[i], atacantes[j], peso);
-            adicionarArestaMatriz(grafoMatriz, atacantes[i], atacantes[j], peso);
-        }
-    }
+    //zd
+    peso = calcularPeso(&jogadores[3], &jogadores[4]);
+    adicionarArestaLista(grafoLista, 3, 4, peso);
+    adicionarArestaMatriz(grafoMatriz, 3, 4, peso);
+
+    peso = calcularPeso(&jogadores[3], &jogadores[7]);
+    adicionarArestaLista(grafoLista, 3, 7, peso);
+    adicionarArestaMatriz(grafoMatriz, 3, 7, peso);
+
+    //ld
+    peso = calcularPeso(&jogadores[4], &jogadores[7]);
+    adicionarArestaLista(grafoLista, 4, 7, peso);
+    adicionarArestaMatriz(grafoMatriz, 4, 7, peso);
+
+    //me
+    peso = calcularPeso(&jogadores[5], &jogadores[6]);
+    adicionarArestaLista(grafoLista, 5, 6, peso);
+    adicionarArestaMatriz(grafoMatriz, 5, 6, peso);
+
+    peso = calcularPeso(&jogadores[5], &jogadores[8]);
+    adicionarArestaLista(grafoLista, 5, 8, peso);
+    adicionarArestaMatriz(grafoMatriz, 5, 8, peso);
+
+    //mc
+    peso = calcularPeso(&jogadores[6], &jogadores[7]);
+    adicionarArestaLista(grafoLista, 6, 7, peso);
+    adicionarArestaMatriz(grafoMatriz, 6, 7, peso);
+
+    peso = calcularPeso(&jogadores[6], &jogadores[9]);
+    adicionarArestaLista(grafoLista, 6, 9, peso);
+    adicionarArestaMatriz(grafoMatriz, 6, 9, peso);
+
+    //md
+    peso = calcularPeso(&jogadores[7], &jogadores[10]);
+    adicionarArestaLista(grafoLista, 7, 10, peso);
+    adicionarArestaMatriz(grafoMatriz, 7, 10, peso);
+
+    //pe
+    peso = calcularPeso(&jogadores[8], &jogadores[9]);
+    adicionarArestaLista(grafoLista, 8, 9, peso);
+    adicionarArestaMatriz(grafoMatriz, 8, 9, peso);
+
+    //ca
+
+    //pd
+    peso = calcularPeso(&jogadores[10], &jogadores[9]);
+    adicionarArestaLista(grafoLista, 10, 9, peso);
+    adicionarArestaMatriz(grafoMatriz, 10, 9, peso);
+
+    // gol2 (11)
+    peso = calcularPeso(&jogadores[11], &jogadores[13]);
+    adicionarArestaLista(grafoLista, 11, 13, peso);
+    adicionarArestaMatriz(grafoMatriz, 11, 13, peso);
+
+    peso = calcularPeso(&jogadores[11], &jogadores[14]);
+    adicionarArestaLista(grafoLista, 11, 14, peso);
+    adicionarArestaMatriz(grafoMatriz, 11, 14, peso);
+
+    // le2 (12)
+    peso = calcularPeso(&jogadores[12], &jogadores[13]);
+    adicionarArestaLista(grafoLista, 12, 13, peso);
+    adicionarArestaMatriz(grafoMatriz, 12, 13, peso);
+
+    peso = calcularPeso(&jogadores[12], &jogadores[16]);
+    adicionarArestaLista(grafoLista, 12, 16, peso);
+    adicionarArestaMatriz(grafoMatriz, 12, 16, peso);
+
+    // ze2 (13)
+    peso = calcularPeso(&jogadores[13], &jogadores[14]);
+    adicionarArestaLista(grafoLista, 13, 14, peso);
+    adicionarArestaMatriz(grafoMatriz, 13, 14, peso);
+
+    peso = calcularPeso(&jogadores[13], &jogadores[16]);
+    adicionarArestaLista(grafoLista, 13, 16, peso);
+    adicionarArestaMatriz(grafoMatriz, 13, 16, peso);
+
+    // zd2 (14)
+    peso = calcularPeso(&jogadores[14], &jogadores[15]);
+    adicionarArestaLista(grafoLista, 14, 15, peso);
+    adicionarArestaMatriz(grafoMatriz, 14, 15, peso);
+
+    peso = calcularPeso(&jogadores[14], &jogadores[18]);
+    adicionarArestaLista(grafoLista, 14, 18, peso);
+    adicionarArestaMatriz(grafoMatriz, 14, 18, peso);
+
+    // ld2 (15)
+    peso = calcularPeso(&jogadores[15], &jogadores[18]);
+    adicionarArestaLista(grafoLista, 15, 18, peso);
+    adicionarArestaMatriz(grafoMatriz, 15, 18, peso);
+
+    // me2 (16)
+    peso = calcularPeso(&jogadores[16], &jogadores[17]);
+    adicionarArestaLista(grafoLista, 16, 17, peso);
+    adicionarArestaMatriz(grafoMatriz, 16, 17, peso);
+
+    peso = calcularPeso(&jogadores[16], &jogadores[19]);
+    adicionarArestaLista(grafoLista, 16, 19, peso);
+    adicionarArestaMatriz(grafoMatriz, 16, 19, peso);
+
+    // mc2 (17)
+    peso = calcularPeso(&jogadores[17], &jogadores[18]);
+    adicionarArestaLista(grafoLista, 17, 18, peso);
+    adicionarArestaMatriz(grafoMatriz, 17, 18, peso);
+
+    peso = calcularPeso(&jogadores[17], &jogadores[20]);
+    adicionarArestaLista(grafoLista, 17, 20, peso);
+    adicionarArestaMatriz(grafoMatriz, 17, 20, peso);
+
+    // md2 (18)
+    peso = calcularPeso(&jogadores[18], &jogadores[21]);
+    adicionarArestaLista(grafoLista, 18, 21, peso);
+    adicionarArestaMatriz(grafoMatriz, 18, 21, peso);
+
+    // pe2 (19)
+    peso = calcularPeso(&jogadores[19], &jogadores[20]);
+    adicionarArestaLista(grafoLista, 19, 20, peso);
+    adicionarArestaMatriz(grafoMatriz, 19, 20, peso);
+
+    // ca2 (20)
+    // (não tem ligação além da com PD2)
+
+    // pd2 (21)
+    peso = calcularPeso(&jogadores[21], &jogadores[20]);
+    adicionarArestaLista(grafoLista, 21, 20, peso);
+    adicionarArestaMatriz(grafoMatriz, 21, 20, peso);
+
+
 }
 
 int main()
@@ -211,9 +289,14 @@ int main()
     GrafoLista* gLista = criarGrafoLista(22, jogadores);
     GrafoMatriz* gMatriz = criarGrafoMatriz(22, jogadores);
 
-    conectarPosicoes(gLista, gMatriz, jogadores, 22);
+    conectarPosicoes(gLista, gMatriz, jogadores);
 
     printf("\nGrafos criados com sucesso!\n");
+
+    printf("GrafoLista\n");
+    imprimirGrafoLista(gLista);
+    printf("GrafoMatriz\n");
+    imprimirGrafoMatriz(gMatriz);
 
     printf("\n=================================================\n");
     printf("   EXECUTANDO ALGORITMOS\n");

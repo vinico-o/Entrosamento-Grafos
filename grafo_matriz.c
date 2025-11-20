@@ -578,3 +578,23 @@ void recomendarPasseMatriz(GrafoMatriz* g, int jogador)
         printf("Nenhum vizinho disponivel!\n");
     }
 }
+
+void imprimirGrafoMatriz(GrafoMatriz* g)
+{
+    printf("\n=== Imprimindo Grafo (Matriz) ===\n");
+    for(int i = 0; i < g->numVertices; i++)
+    {
+        for(int j = 0; j < g->numVertices; j++)
+        {
+            if(g->matriz[i][j] > 0)
+            {
+                printf("-- ");
+            }
+            else
+            {
+                printf("00 ");
+            }
+        }
+        printf("\n");
+    }
+}
