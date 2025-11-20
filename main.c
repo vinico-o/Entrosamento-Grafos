@@ -8,106 +8,144 @@
 
 #define MAX_JOGADORES 100
 
-int lerArquivo(const char* nome, char dados[][100], int maxLinhas) {
-    FILE* f = fopen(nome, "r");
-    if (!f) {
+int lerArquivo(const char* nome, char dados[][100], int maxLinhas)
+{
+    int i; // contador de linhas lidas
+    FILE* arquivo = fopen(nome, "r");
+    // Verifica se o arquivo foi aberto corretamente
+    if (!arquivo)
+    {
         printf("Erro ao abrir %s\n", nome);
         return 0;
     }
 
-    int i = 0;
-    while (i < maxLinhas && fgets(dados[i], 100, f)) {
-        dados[i][strcspn(dados[i], "\n")] = 0;
-        i++;
+    for(i = 0; i < maxLinhas && fgets(dados[i], 100, arquivo); i++)
+    {
+        dados[i][strcspn(dados[i], "\n")] = 0; // remove o /n dos dados 
     }
 
-    fclose(f);
+    fclose(arquivo);
     return i;
 }
 
-float calcularPeso(Jogador* j1, Jogador* j2) {
-    int entrosamento = 0;
+// calcula o peso da aresta baseado no entrosamento
+float calcularPeso(Jogador* j1, Jogador* j2)
+{
+    int entrosamento = 1; // o valor comeca com 1 para evitar dividir por 0
 
-    if (strcmp(j1->time, j2->time) == 0) entrosamento++;
-    if (strcmp(j1->nacionalidade, j2->nacionalidade) == 0) entrosamento++;
+    // o entrosamento aumenta a cada atribuito igual entre os jogadores
+    if(strcmp(j1->time, j2->time) == 0)
+    {
+        entrosamento++;
+    }
+    if(strcmp(j1->nacionalidade, j2->nacionalidade) == 0)
+    {
+        entrosamento++;
+    }
 
-    return 1.0 / (entrosamento + 0.1);
+    // Como o peso eh inversamente proporcional ao entrosamento,
+    // dividdimos 1 pelo valor do entrosamento
+    return 1.0 / entrosamento;
 }
 
-void conectarPosicoes(GrafoLista* gLista, GrafoMatriz* gMatriz,
-                      Jogador* jogs, int n) {
+void conectarPosicoes(GrafoLista* grafoLista, GrafoMatriz* grafoMatriz, Jogador* jogadores, int n)
+{
+    // tamanho 22 para o caso em que todos os jogadores sejam da mesma posicao
     int goleiros[22], defensores[22], meios[22], atacantes[22];
-    int ng = 0, nd = 0, nm = 0, na = 0;
+    // contador de cada posicao
+    int numGoleiros = 0, numDefensores = 0, numMeios = 0, numAtacantes = 0;
 
-    for (int i = 0; i < n; i++) {
-        if (strcmp(jogs[i].posicao, "Goleiro") == 0) {
-            goleiros[ng++] = i;
-        } else if (strcmp(jogs[i].posicao, "Zagueiro") == 0 ||
-                   strcmp(jogs[i].posicao, "Lateral") == 0) {
-            defensores[nd++] = i;
-        } else if (strcmp(jogs[i].posicao, "Meio-campo") == 0) {
-            meios[nm++] = i;
-        } else if (strcmp(jogs[i].posicao, "Atacante") == 0) {
-            atacantes[na++] = i;
+    for(int i = 0; i < n; i++)
+    {
+        if(strcmp(jogadores[i].posicao, "GOL") == 0)
+        {
+            goleiros[numGoleiros++] = i;
+        }
+        else if(strcmp(jogadores[i].posicao, "ZE") == 0 || strcmp(jogadores[i].posicao, "ZD") ||
+                strcmp(jogadores[i].posicao, "LE") == 0 || strcmp(jogadores[i].posicao, "LD") == 0)
+        {
+            defensores[numDefensores++] = i;
+        }
+        else if(strcmp(jogadores[i].posicao, "MC") == 0 || strcmp(jogadores[i].posicao, "ME") == 0 || strcmp(jogadores[i].posicao, "MD") == 0)
+        {
+            meios[numMeios++] = i;
+        }
+        else if(strcmp(jogadores[i].posicao, "PD") == 0 || strcmp(jogadores[i].posicao, "CA") == 0 || strcmp(jogadores[i].posicao, "PE") == 0)
+        {
+            atacantes[numAtacantes++] = i;
         }
     }
 
     // Conectar goleiros com defensores
-    for (int i = 0; i < ng; i++) {
-        for (int j = 0; j < nd; j++) {
-            float peso = calcularPeso(&jogs[goleiros[i]], &jogs[defensores[j]]);
-            adicionarArestaLista(gLista, goleiros[i], defensores[j], peso);
-            adicionarArestaMatriz(gMatriz, goleiros[i], defensores[j], peso);
+    for(int i = 0; i < numGoleiros; i++) 
+    {
+        for (int j = 0; j < numDefensores; j++)
+        {
+            float peso = calcularPeso(&jogadores[goleiros[i]], &jogadores[defensores[j]]);
+            adicionarArestaLista(grafoLista, goleiros[i], defensores[j], peso);
+            adicionarArestaMatriz(grafoMatriz, goleiros[i], defensores[j], peso);
         }
     }
 
     // Conectar defensores entre si
-    for (int i = 0; i < nd; i++) {
-        for (int j = i + 1; j < nd; j++) {
-            float peso = calcularPeso(&jogs[defensores[i]], &jogs[defensores[j]]);
-            adicionarArestaLista(gLista, defensores[i], defensores[j], peso);
-            adicionarArestaMatriz(gMatriz, defensores[i], defensores[j], peso);
+    for(int i = 0; i < numDefensores; i++)
+    {
+        for (int j = i + 1; j < numDefensores; j++)
+        {
+            float peso = calcularPeso(&jogadores[defensores[i]], &jogadores[defensores[j]]);
+            adicionarArestaLista(grafoLista, defensores[i], defensores[j], peso);
+            adicionarArestaMatriz(grafoMatriz, defensores[i], defensores[j], peso);
         }
     }
 
     // Conectar defensores com meios
-    for (int i = 0; i < nd; i++) {
-        for (int j = 0; j < nm; j++) {
-            float peso = calcularPeso(&jogs[defensores[i]], &jogs[meios[j]]);
-            adicionarArestaLista(gLista, defensores[i], meios[j], peso);
-            adicionarArestaMatriz(gMatriz, defensores[i], meios[j], peso);
+    for(int i = 0; i < numDefensores; i++)
+    {
+        for (int j = 0; j < numMeios; j++)
+        {
+            float peso = calcularPeso(&jogadores[defensores[i]], &jogadores[meios[j]]);
+            adicionarArestaLista(grafoLista, defensores[i], meios[j], peso);
+            adicionarArestaMatriz(grafoMatriz, defensores[i], meios[j], peso);
         }
     }
 
     // Conectar meios entre si
-    for (int i = 0; i < nm; i++) {
-        for (int j = i + 1; j < nm; j++) {
-            float peso = calcularPeso(&jogs[meios[i]], &jogs[meios[j]]);
-            adicionarArestaLista(gLista, meios[i], meios[j], peso);
-            adicionarArestaMatriz(gMatriz, meios[i], meios[j], peso);
+    for(int i = 0; i < numMeios; i++)
+    {
+        for (int j = i + 1; j < numMeios; j++)
+        {
+            float peso = calcularPeso(&jogadores[meios[i]], &jogadores[meios[j]]);
+            adicionarArestaLista(grafoLista, meios[i], meios[j], peso);
+            adicionarArestaMatriz(grafoMatriz, meios[i], meios[j], peso);
         }
     }
 
     // Conectar meios com atacantes
-    for (int i = 0; i < nm; i++) {
-        for (int j = 0; j < na; j++) {
-            float peso = calcularPeso(&jogs[meios[i]], &jogs[atacantes[j]]);
-            adicionarArestaLista(gLista, meios[i], atacantes[j], peso);
-            adicionarArestaMatriz(gMatriz, meios[i], atacantes[j], peso);
+    for(int i = 0; i < numMeios; i++)
+    {
+        for (int j = 0; j < numAtacantes; j++)
+        {
+            float peso = calcularPeso(&jogadores[meios[i]], &jogadores[atacantes[j]]);
+            adicionarArestaLista(grafoLista, meios[i], atacantes[j], peso);
+            adicionarArestaMatriz(grafoMatriz, meios[i], atacantes[j], peso);
         }
     }
 
     // Conectar atacantes entre si
-    for (int i = 0; i < na; i++) {
-        for (int j = i + 1; j < na; j++) {
-            float peso = calcularPeso(&jogs[atacantes[i]], &jogs[atacantes[j]]);
-            adicionarArestaLista(gLista, atacantes[i], atacantes[j], peso);
-            adicionarArestaMatriz(gMatriz, atacantes[i], atacantes[j], peso);
+    for(int i = 0; i < numAtacantes; i++)
+    {
+        for (int j = i + 1; j < numAtacantes; j++)
+        {
+            float peso = calcularPeso(&jogadores[atacantes[i]], &jogadores[atacantes[j]]);
+            adicionarArestaLista(grafoLista, atacantes[i], atacantes[j], peso);
+            adicionarArestaMatriz(grafoMatriz, atacantes[i], atacantes[j], peso);
         }
     }
 }
 
-int main() {
+int main()
+{
+    // seed para aleatorizar os jogadores
     srand(time(NULL));
 
     printf("=================================================\n");
@@ -119,66 +157,51 @@ int main() {
     char times[MAX_JOGADORES][100];
     char nacionalidades[MAX_JOGADORES][100];
 
-    printf("Lendo arquivos...\n");
+    // leitura dos arquivos
     int n1 = lerArquivo("..\\nomes.txt", nomes, MAX_JOGADORES);
     int n2 = lerArquivo("..\\posicoes.txt", posicoes, MAX_JOGADORES);
     int n3 = lerArquivo("..\\times.txt", times, MAX_JOGADORES);
     int n4 = lerArquivo("..\\nacionalidade.txt", nacionalidades, MAX_JOGADORES);
 
-    if (n1 == 0 || n2 == 0 || n3 == 0 || n4 == 0) {
-        printf("Erro: verifique se todos os arquivos existem!\n");
-        return 1;
-    }
-
-    int totalJogadores = (n1 < n2) ? n1 : n2;
-    totalJogadores = (totalJogadores < n3) ? totalJogadores : n3;
-    totalJogadores = (totalJogadores < n4) ? totalJogadores : n4;
-
-    printf("Total de jogadores lidos: %d\n\n", totalJogadores);
-
-    if (totalJogadores < 22) {
-        printf("Erro: necessario pelo menos 22 jogadores!\n");
+    // verifica se foi possivel abrir os arquivos
+    if(n1 == 0 || n2 == 0 || n3 == 0 || n4 == 0)
+    {
+        printf("Erro ao abrir algum dos arquivos!\n");
         return 1;
     }
 
     // Sortear 22 jogadores sem repetição
     int indices[MAX_JOGADORES];
-    for (int i = 0; i < totalJogadores; i++) indices[i] = i;
 
     for (int i = 0; i < 22; i++) {
-        int j = i + rand() % (totalJogadores - i);
-        int temp = indices[i];
-        indices[i] = indices[j];
-        indices[j] = temp;
+        indices[i] = rand() % MAX_JOGADORES ;  // pode repetir jogador
     }
 
     Jogador* jogadores = (Jogador*)malloc(22 * sizeof(Jogador));
 
     printf("=== ESCALACAO (22 jogadores sorteados) ===\n\n");
     printf("TITULARES:\n");
-    for (int i = 0; i < 11; i++) {
+    for(int i = 0; i < 11; i++)
+    {
         int idx = indices[i];
         jogadores[i].id = i;
         strcpy(jogadores[i].nome, nomes[idx]);
         strcpy(jogadores[i].posicao, posicoes[idx]);
         strcpy(jogadores[i].time, times[idx]);
         strcpy(jogadores[i].nacionalidade, nacionalidades[idx]);
-        printf("%d. %s - %s (%s, %s)\n", i+1,
-               jogadores[i].nome, jogadores[i].posicao,
-               jogadores[i].time, jogadores[i].nacionalidade);
+        printf("%d. %s - %s (%s, %s)\n", i+1, jogadores[i].nome, jogadores[i].posicao, jogadores[i].time, jogadores[i].nacionalidade);
     }
 
     printf("\nRESERVAS:\n");
-    for (int i = 11; i < 22; i++) {
+    for (int i = 11; i < 22; i++)
+    {
         int idx = indices[i];
         jogadores[i].id = i;
         strcpy(jogadores[i].nome, nomes[idx]);
         strcpy(jogadores[i].posicao, posicoes[idx]);
         strcpy(jogadores[i].time, times[idx]);
         strcpy(jogadores[i].nacionalidade, nacionalidades[idx]);
-        printf("%d. %s - %s (%s, %s)\n", i-10,
-               jogadores[i].nome, jogadores[i].posicao,
-               jogadores[i].time, jogadores[i].nacionalidade);
+        printf("%d. %s - %s (%s, %s)\n", i-10, jogadores[i].nome, jogadores[i].posicao,jogadores[i].time, jogadores[i].nacionalidade);
     }
 
     printf("\n=================================================\n");
@@ -219,13 +242,11 @@ int main() {
     // Existe Caminho
     printf("\n=== Existe Caminho (Lista) ===\n");
     int existe = existeCaminhoLista(gLista, 0, 21);
-    printf("De %s ate %s: %s\n", jogadores[0].nome, jogadores[21].nome,
-           existe ? "SIM" : "NAO");
+    printf("De %s ate %s: %s\n", jogadores[0].nome, jogadores[21].nome, existe ? "SIM" : "NAO");
 
     printf("\n=== Existe Caminho (Matriz) ===\n");
     existe = existeCaminhoMatriz(gMatriz, 0, 21);
-    printf("De %s ate %s: %s\n", jogadores[0].nome, jogadores[21].nome,
-           existe ? "SIM" : "NAO");
+    printf("De %s ate %s: %s\n", jogadores[0].nome, jogadores[21].nome, existe ? "SIM" : "NAO");
 
     // Recomendação de Passe
     recomendarPasseLista(gLista, 5);
