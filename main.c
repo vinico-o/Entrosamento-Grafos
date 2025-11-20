@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "jogador.h"
-#include "grafo_lista.c"
-#include "grafo_matriz.c"
+#include "estruturas/jogador.h"
+#include "funcoes/grafo_lista.c"
+#include "funcoes/grafo_matriz.c"
 
 #define MAX_JOGADORES 311 //Numero de jogadores nos arquivos
 
@@ -236,10 +236,10 @@ int main()
     char nacionalidades[MAX_JOGADORES][100];
 
     // leitura dos arquivos
-    int n1 = lerArquivo("..\\nomes.txt", nomes, MAX_JOGADORES);
-    int n2 = lerArquivo("..\\posicoes.txt", posicoes, MAX_JOGADORES);
-    int n3 = lerArquivo("..\\times.txt", times, MAX_JOGADORES);
-    int n4 = lerArquivo("..\\nacionalidade.txt", nacionalidades, MAX_JOGADORES);
+    int n1 = lerArquivo("..\\dados/nomes.txt", nomes, MAX_JOGADORES);
+    int n2 = lerArquivo("..\\dados/posicoes.txt", posicoes, MAX_JOGADORES);
+    int n3 = lerArquivo("..\\dados/times.txt", times, MAX_JOGADORES);
+    int n4 = lerArquivo("..\\dados/nacionalidade.txt", nacionalidades, MAX_JOGADORES);
 
     // verifica se foi possivel abrir os arquivos
     if(n1 == 0 || n2 == 0 || n3 == 0 || n4 == 0)

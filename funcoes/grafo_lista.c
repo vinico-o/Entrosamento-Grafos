@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <float.h>
-#include "grafo_lista.h"
+#include "../estruturas/grafo_lista.h"
 
 GrafoLista* criarGrafoLista(int n,Jogador* jogadores)
 {

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <float.h>
-#include "grafo_matriz.h"
+#include "../estruturas/grafo_matriz.h"
 
 
 // gera um grafo com matriz de adjacencia
