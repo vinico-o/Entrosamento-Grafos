@@ -93,39 +93,39 @@ void bfsLista(GrafoLista* g, int inicio) {
 typedef struct {
     int vertice;
     float dist;
-} HeapNo;
+} HeapNoLista;
 
 typedef struct {
-    HeapNo* array;
+    HeapNoLista* array;
     int tamanho;
     int capacidade;
-} MinHeap;
+} MinHeapLista;
 
-MinHeap* criarHeap(int cap) {
-    MinHeap* h = (MinHeap*)malloc(sizeof(MinHeap));
-    h->array = (HeapNo*)malloc(cap * sizeof(HeapNo));
+MinHeapLista* criarHeapLista(int cap) {
+    MinHeapLista* h = (MinHeapLista*)malloc(sizeof(MinHeapLista));
+    h->array = (HeapNoLista*)malloc(cap * sizeof(HeapNoLista));
     h->tamanho = 0;
     h->capacidade = cap;
     return h;
 }
 
-void trocar(HeapNo* a, HeapNo* b) {
-    HeapNo temp = *a;
+void trocarLista(HeapNoLista* a, HeapNoLista* b) {
+    HeapNoLista temp = *a;
     *a = *b;
     *b = temp;
 }
 
-void heapifyUp(MinHeap* h, int idx) {
+void heapifyUpLista(MinHeapLista* h, int idx) {
     while (idx > 0) {
         int pai = (idx - 1) / 2;
         if (h->array[idx].dist < h->array[pai].dist) {
-            trocar(&h->array[idx], &h->array[pai]);
+            trocarLista(&h->array[idx], &h->array[pai]);
             idx = pai;
         } else break;
     }
 }
 
-void heapifyDown(MinHeap* h, int idx) {
+void heapifyDownLista(MinHeapLista* h, int idx) {
     int menor = idx;
     int esq = 2 * idx + 1;
     int dir = 2 * idx + 2;
@@ -136,23 +136,23 @@ void heapifyDown(MinHeap* h, int idx) {
         menor = dir;
     
     if (menor != idx) {
-        trocar(&h->array[idx], &h->array[menor]);
-        heapifyDown(h, menor);
+        trocarLista(&h->array[idx], &h->array[menor]);
+        heapifyDownLista(h, menor);
     }
 }
 
-void inserirHeap(MinHeap* h, int v, float d) {
+void inserirHeapLista(MinHeapLista* h, int v, float d) {
     h->array[h->tamanho].vertice = v;
     h->array[h->tamanho].dist = d;
-    heapifyUp(h, h->tamanho);
+    heapifyUpLista(h, h->tamanho);
     h->tamanho++;
 }
 
-HeapNo extrairMin(MinHeap* h) {
-    HeapNo min = h->array[0];
+HeapNoLista extrairMinLista(MinHeapLista* h) {
+    HeapNoLista min = h->array[0];
     h->array[0] = h->array[h->tamanho - 1];
     h->tamanho--;
-    heapifyDown(h, 0);
+    heapifyDownLista(h, 0);
     return min;
 }
 
@@ -170,11 +170,11 @@ void dijkstraLista(GrafoLista* g, int inicio, int fim) {
     }
     dist[inicio] = 0.0;
     
-    MinHeap* h = criarHeap(g->numVertices * 10);
-    inserirHeap(h, inicio, 0.0);
+    MinHeapLista* h = criarHeapLista(g->numVertices * 10);
+    inserirHeapLista(h, inicio, 0.0);
     
     while (h->tamanho > 0) {
-        HeapNo atual = extrairMin(h);
+        HeapNoLista atual = extrairMinLista(h);
         int u = atual.vertice;
         
         if (visitado[u]) continue;
@@ -188,7 +188,7 @@ void dijkstraLista(GrafoLista* g, int inicio, int fim) {
             if (!visitado[v] && dist[u] + peso < dist[v]) {
                 dist[v] = dist[u] + peso;
                 ant[v] = u;
-                inserirHeap(h, v, dist[v]);
+                inserirHeapLista(h, v, dist[v]);
             }
             adj = adj->prox;
         }
@@ -230,13 +230,13 @@ void primLista(GrafoLista* g) {
     }
     chave[0] = 0.0;
     
-    MinHeap* h = criarHeap(g->numVertices * 10);
-    inserirHeap(h, 0, 0.0);
+    MinHeapLista* h = criarHeapLista(g->numVertices * 10);
+    inserirHeapLista(h, 0, 0.0);
     
     float pesoTotal = 0.0;
     
     while (h->tamanho > 0) {
-        HeapNo atual = extrairMin(h);
+        HeapNoLista atual = extrairMinLista(h);
         int u = atual.vertice;
         
         if (inMST[u]) continue;
@@ -256,7 +256,7 @@ void primLista(GrafoLista* g) {
             if (!inMST[v] && peso < chave[v]) {
                 chave[v] = peso;
                 pai[v] = u;
-                inserirHeap(h, v, chave[v]);
+                inserirHeapLista(h, v, chave[v]);
             }
             adj = adj->prox;
         }
