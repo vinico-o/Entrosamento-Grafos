@@ -4,237 +4,419 @@
 #include <float.h>
 #include "grafo_matriz.h"
 
-GrafoMatriz* criarGrafoMatriz(int n, Jogador* jogs) {
-    GrafoMatriz* g = (GrafoMatriz*)malloc(sizeof(GrafoMatriz));
+
+// gera um grafo com matriz de adjacencia
+GrafoMatriz* criarGrafoMatriz(int n, Jogador* jogs)
+{
+    GrafoMatriz* g = (GrafoMatriz*) malloc(sizeof(GrafoMatriz));
+    
     g->numVertices = n;
+    
     g->jogadores = jogs;
+    
     g->matriz = (float**)malloc(n * sizeof(float*));
 
-    for (int i = 0; i < n; i++) {
-        g->matriz[i] = (float*)malloc(n * sizeof(float));
-        for (int j = 0; j < n; j++) {
+    
+    // inicializa a matriz com valores 0
+    for (int i = 0; i < n; i++)
+    {
+        g->matriz[i] = (float*) malloc(n * sizeof(float));
+        for (int j = 0; j < n; j++)
+        {
             g->matriz[i][j] = 0.0;
         }
     }
+
     return g;
 }
 
-void adicionarArestaMatriz(GrafoMatriz* g, int src, int dest, float peso) {
+// insercao no grafo
+void adicionarArestaMatriz(GrafoMatriz* g, int src, int dest, float peso)
+{   
     g->matriz[src][dest] = peso;
     g->matriz[dest][src] = peso;
 }
 
-void liberarGrafoMatriz(GrafoMatriz* g) {
-    for (int i = 0; i < g->numVertices; i++) {
+// free no grafo
+void liberarGrafoMatriz(GrafoMatriz* g)
+{
+    // free nas linhas
+    for (int i = 0; i < g->numVertices; i++)
+    {
         free(g->matriz[i]);
     }
+    
+    // free na matriz
     free(g->matriz);
+
+    // free no grafo
     free(g);
 }
 
-void dfsRecursivoMatriz(GrafoMatriz* g, int v, int* visitado) {
+// dfs recursivo 
+void dfsRecursivoMatriz(GrafoMatriz* g, int v, int* visitado)
+{
     visitado[v] = 1;
+    
     printf("%s (%s) -> ", g->jogadores[v].nome, g->jogadores[v].posicao);
 
-    for (int i = 0; i < g->numVertices; i++) {
-        if (g->matriz[v][i] > 0 && !visitado[i]) {
+    for (int i = 0; i < g->numVertices; i++)
+    {
+        // percorre pelos vizinhos nao visitados
+        if (g->matriz[v][i] > 0 && !visitado[i])
+        {
             dfsRecursivoMatriz(g, i, visitado);
         }
     }
 }
 
-void dfsMatriz(GrafoMatriz* g, int inicio) {
+// dfs - busca em profundidade
+void dfsMatriz(GrafoMatriz* g, int inicio)
+{
     printf("\n=== DFS (Matriz) iniciando em %s ===\n", g->jogadores[inicio].nome);
+    
+    // criando o vetor auxiliar 'visitado'
     int* visitado = (int*)calloc(g->numVertices, sizeof(int));
+    
+    // realizando busca dfs
     dfsRecursivoMatriz(g, inicio, visitado);
+    
     printf("FIM\n");
+    
+    // free no vetor visitado
     free(visitado);
 }
 
-void bfsMatriz(GrafoMatriz* g, int inicio) {
+// bfs - busca em largura
+void bfsMatriz(GrafoMatriz* g, int inicio)
+{
     printf("\n=== BFS (Matriz) iniciando em %s ===\n", g->jogadores[inicio].nome);
+    
+    // criiando o vetor auxiliar 'visitado'
     int* visitado = (int*)calloc(g->numVertices, sizeof(int));
+
+    // criando a fila estática
     int* fila = (int*)malloc(g->numVertices * sizeof(int));
+    
     int frente = 0, tras = 0;
 
+    // marcando o primeiro como visitado
     visitado[inicio] = 1;
+    
     fila[tras++] = inicio;
 
-    while (frente < tras) {
+    // realizando a busca bfs
+    while(frente < tras)
+    {
+        // pegando o primeiro da fila
         int v = fila[frente++];
+        
         printf("%s (%s) -> ", g->jogadores[v].nome, g->jogadores[v].posicao);
 
-        for (int i = 0; i < g->numVertices; i++) {
-            if (g->matriz[v][i] > 0 && !visitado[i]) {
+        // percorrendo os vizinhos
+        for(int i = 0; i < g->numVertices; i++)
+        {
+            // se o vizinho nao estiver sido visitado -> visita ele e adiciona na fila
+            if (g->matriz[v][i] > 0 && !visitado[i])
+            {
                 visitado[i] = 1;
                 fila[tras++] = i;
             }
         }
     }
+    
     printf("FIM\n");
+    
+
+    // liberando os vetores visitado e fila
     free(visitado);
+    
     free(fila);
 }
 
-typedef struct {
+// estrutura de dados para o min-heap (Dijkstra e Prim)
+typedef struct
+{
     int vertice;
     float dist;
-} HeapNoMatriz;
+}HeapNoMatriz;
 
-typedef struct {
+// estrutura do min-heap
+typedef struct
+{
     HeapNoMatriz* array;
     int tamanho;
     int capacidade;
-} MinHeapMatriz;
+}MinHeapMatriz;
 
-MinHeapMatriz* criarHeapMatriz(int cap) {
+
+// criar heap
+MinHeapMatriz* criarHeapMatriz(int cap)
+{
     MinHeapMatriz* h = (MinHeapMatriz*)malloc(sizeof(MinHeapMatriz));
+    
     h->array = (HeapNoMatriz*)malloc(cap * sizeof(HeapNoMatriz));
+    
     h->tamanho = 0;
+    
     h->capacidade = cap;
+    
     return h;
 }
 
-void trocarMatriz(HeapNoMatriz* a, HeapNoMatriz* b) {
+// trocar dois nós do heap
+void trocarMatriz(HeapNoMatriz* a, HeapNoMatriz* b)
+{
     HeapNoMatriz temp = *a;
+    
     *a = *b;
+    
     *b = temp;
 }
 
-void heapifyUpMatriz(MinHeapMatriz* h, int idx) {
-    while (idx > 0) {
+// ajustar para cima
+void heapifyUpMatriz(MinHeapMatriz* h, int idx)
+{
+    // enquanto nao chegar na raiz
+    while (idx > 0)
+    {
         int pai = (idx - 1) / 2;
-        if (h->array[idx].dist < h->array[pai].dist) {
+        
+        // se o no atual for menor que o pai -> troca
+        if (h->array[idx].dist < h->array[pai].dist)
+        {
             trocarMatriz(&h->array[idx], &h->array[pai]);
             idx = pai;
-        } else break;
+        } 
+
+        else
+        {
+            break;
+        }
     }
 }
 
-void heapifyDownMatriz(MinHeapMatriz* h, int idx) {
+// ajustar para baixo
+void heapifyDownMatriz(MinHeapMatriz* h, int idx)
+{
     int menor = idx;
+    
     int esq = 2 * idx + 1;
+    
     int dir = 2 * idx + 2;
 
+    // verifica se o filho esquerdo é menor
     if (esq < h->tamanho && h->array[esq].dist < h->array[menor].dist)
+    {
         menor = esq;
+    }
+        
+    // verifica se o filho direito é menor
     if (dir < h->tamanho && h->array[dir].dist < h->array[menor].dist)
+    {
         menor = dir;
+    }
 
-    if (menor != idx) {
+    // se o menor nao for o idx atual, troca e continua ajustando para baixo (chama novamente a função para descer o no trocado)
+    if (menor != idx) 
+    {
         trocarMatriz(&h->array[idx], &h->array[menor]);
+        
         heapifyDownMatriz(h, menor);
     }
 }
 
-void inserirHeapMatriz(MinHeapMatriz* h, int v, float d) {
+// inserir no heap
+void inserirHeapMatriz(MinHeapMatriz* h, int v, float d)
+{
     h->array[h->tamanho].vertice = v;
+    
     h->array[h->tamanho].dist = d;
+    
     heapifyUpMatriz(h, h->tamanho);
+    
     h->tamanho++;
 }
 
-HeapNoMatriz extrairMinMatriz(MinHeapMatriz* h) {
+// extrair o minimo do heap -> remove o no com menor distancia
+HeapNoMatriz extrairMinMatriz(MinHeapMatriz* h)
+{
     HeapNoMatriz min = h->array[0];
+    
     h->array[0] = h->array[h->tamanho - 1];
+    
     h->tamanho--;
+    
     heapifyDownMatriz(h, 0);
+    
     return min;
 }
 
-void dijkstraMatriz(GrafoMatriz* g, int inicio, int fim) {
-    printf("\n=== Dijkstra (Matriz) de %s ate %s ===\n",
-           g->jogadores[inicio].nome, g->jogadores[fim].nome);
+// dijkstra -> caminho minimo entre dois vertices(jogadores)
+void dijkstraMatriz(GrafoMatriz* g, int inicio, int fim)
+{
+    printf("\n=== Dijkstra (Matriz) de %s ate %s ===\n", g->jogadores[inicio].nome, g->jogadores[fim].nome);
 
+    // criando o vetor distancia
     float* dist = (float*)malloc(g->numVertices * sizeof(float));
+    
+    // criando o vetor anterior
     int* ant = (int*)malloc(g->numVertices * sizeof(int));
+    
+    // criando o vetor visitado
     int* visitado = (int*)calloc(g->numVertices, sizeof(int));
 
-    for (int i = 0; i < g->numVertices; i++) {
+    // inicializando
+    for(int i = 0; i < g->numVertices; i++)
+    {
         dist[i] = FLT_MAX;
         ant[i] = -1;
     }
+
     dist[inicio] = 0.0;
 
     MinHeapMatriz* h = criarHeapMatriz(g->numVertices * 10);
+    
     inserirHeapMatriz(h, inicio, 0.0);
 
-    while (h->tamanho > 0) {
+    // loop principal do dijkstra (dps de extrair o minimo, percorre os vizinhos e atualiza as distancias)
+    while(h->tamanho > 0)
+    {
         HeapNoMatriz atual = extrairMinMatriz(h);
+        
         int u = atual.vertice;
 
-        if (visitado[u]) continue;
+        if (visitado[u])
+        {
+            continue;
+        }
+        
         visitado[u] = 1;
 
-        for (int v = 0; v < g->numVertices; v++) {
+        // percorrendo os vizinhos
+        for (int v = 0; v < g->numVertices; v++)
+        {
             float peso = g->matriz[u][v];
-            if (peso > 0 && !visitado[v] && dist[u] + peso < dist[v]) {
+
+            // se o peso for maior que 0 (tem aresta) e nao foi visitado e a nova distancia for menor -> atualiza a distancia
+            if (peso > 0 && !visitado[v] && dist[u] + peso < dist[v])
+            {
                 dist[v] = dist[u] + peso;
+                
                 ant[v] = u;
+                
                 inserirHeapMatriz(h, v, dist[v]);
             }
         }
     }
 
-    if (dist[fim] == FLT_MAX) {
+    // imprimindo o resultado
+    if (dist[fim] == FLT_MAX)
+    {
         printf("Nao ha caminho!\n");
-    } else {
+    } 
+    
+    else
+    {
         printf("Distancia: %.2f\n", dist[fim]);
+        
         printf("Caminho: ");
+        
         int caminho[22], tam = 0;
-        for (int v = fim; v != -1; v = ant[v]) {
+        
+        // reconstruindo o caminho
+        for (int v = fim; v != -1; v = ant[v])
+        {
             caminho[tam++] = v;
         }
-        for (int i = tam - 1; i >= 0; i--) {
+        
+        // imprimindo o caminho invertido
+        for (int i = tam - 1; i >= 0; i--)
+        {
             printf("%s", g->jogadores[caminho[i]].nome);
             if (i > 0) printf(" -> ");
         }
+
         printf("\n");
     }
 
+
+    // free nos vetores e estruturas 
+
     free(dist);
+
     free(ant);
+    
     free(visitado);
+    
     free(h->array);
+    
     free(h);
 }
 
-void primMatriz(GrafoMatriz* g) {
+
+// prim -> gera a arvore geradora minima
+void primMatriz(GrafoMatriz* g)
+{
     printf("\n=== Arvore Geradora Minima - Prim (Matriz) ===\n");
 
+    // criando o vetor inMST (se o vertice ja esta na MST)
     int* inMST = (int*)calloc(g->numVertices, sizeof(int));
+    
+    // criando o vetor chave (menor peso para adicionar na MST)
     float* chave = (float*)malloc(g->numVertices * sizeof(float));
+    
+    // criando o vetor pai 
     int* pai = (int*)malloc(g->numVertices * sizeof(int));
 
-    for (int i = 0; i < g->numVertices; i++) {
+
+    for(int i = 0; i < g->numVertices; i++)
+    {
         chave[i] = FLT_MAX;
         pai[i] = -1;
     }
+
     chave[0] = 0.0;
 
     MinHeapMatriz* h = criarHeapMatriz(g->numVertices * 10);
+    
     inserirHeapMatriz(h, 0, 0.0);
 
     float pesoTotal = 0.0;
 
-    while (h->tamanho > 0) {
+    // iniciando prim -> enquanto o heap nao estiver vazio, extrai o minimo (nó) e percorre os vizinhos
+    while (h->tamanho > 0)
+    {
         HeapNoMatriz atual = extrairMinMatriz(h);
+        
         int u = atual.vertice;
 
-        if (inMST[u]) continue;
+        if (inMST[u])
+        {
+            continue;
+        }
+        
         inMST[u] = 1;
 
-        if (pai[u] != -1) {
-            printf("%s -- %.2f -- %s\n",
-                   g->jogadores[pai[u]].nome, chave[u], g->jogadores[u].nome);
+        if (pai[u] != -1)
+        {
+            printf("%s -- %.2f -- %s\n", g->jogadores[pai[u]].nome, chave[u], g->jogadores[u].nome);
+            
             pesoTotal += chave[u];
         }
 
-        for (int v = 0; v < g->numVertices; v++) {
+        // passando pelos vizinhos
+        for(int v = 0; v < g->numVertices; v++)
+        {
             float peso = g->matriz[u][v];
-            if (peso > 0 && !inMST[v] && peso < chave[v]) {
+            
+            // se o peso for maior que 0 (tem aresta) e nao esta na MST e o peso for menor que a chave -> atualiza a chave (IGUAL AO DJIKSTRA)
+            if (peso > 0 && !inMST[v] && peso < chave[v])
+            {
                 chave[v] = peso;
+                
                 pai[v] = u;
+                
                 inserirHeapMatriz(h, v, chave[v]);
             }
         }
@@ -242,101 +424,157 @@ void primMatriz(GrafoMatriz* g) {
 
     printf("Peso total da MST: %.2f\n", pesoTotal);
 
+    // free nos betores e estruturas
+
     free(inMST);
+
     free(chave);
+    
     free(pai);
+    
     free(h->array);
+    
     free(h);
 }
 
-void componentesConexosMatriz(GrafoMatriz* g) {
+// componentes conexas - indica as componentes ("grupos") conexas do grafo 
+void componentesConexosMatriz(GrafoMatriz* g)
+{
     printf("\n=== Componentes Conexos (Matriz) ===\n");
 
     int* visitado = (int*)calloc(g->numVertices, sizeof(int));
+    
     int numComponentes = 0;
 
-    for (int i = 0; i < g->numVertices; i++) {
-        if (!visitado[i]) {
+    for (int i = 0; i < g->numVertices; i++)
+    {
+        if (!visitado[i])
+        {
             numComponentes++;
+            
             printf("Componente %d: ", numComponentes);
 
             int* fila = (int*)malloc(g->numVertices * sizeof(int));
+            
             int frente = 0, tras = 0;
 
             visitado[i] = 1;
+            
             fila[tras++] = i;
 
-            while (frente < tras) {
+            while(frente < tras)
+            {
                 int v = fila[frente++];
+                
                 printf("%s ", g->jogadores[v].nome);
 
-                for (int j = 0; j < g->numVertices; j++) {
-                    if (g->matriz[v][j] > 0 && !visitado[j]) {
+                for (int j = 0; j < g->numVertices; j++)
+                {
+                    if (g->matriz[v][j] > 0 && !visitado[j])
+                    {
                         visitado[j] = 1;
                         fila[tras++] = j;
                     }
                 }
             }
             printf("\n");
+            
             free(fila);
         }
     }
 
     printf("Total de componentes: %d\n", numComponentes);
+    
     free(visitado);
 }
 
-int existeCaminhoMatriz(GrafoMatriz* g, int inicio, int fim) {
-    if (inicio == fim) return 1;
+// verifica se existe caminho entre dois vertices (dois jogadores)
+int existeCaminhoMatriz(GrafoMatriz* g, int inicio, int fim)
+{
+    if (inicio == fim)
+    {
+        return 1;
+    }
 
+    // criando o vetor visitado
     int* visitado = (int*)calloc(g->numVertices, sizeof(int));
+    
+    // criando fila
     int* fila = (int*)malloc(g->numVertices * sizeof(int));
+    
     int frente = 0, tras = 0;
 
     visitado[inicio] = 1;
+    
     fila[tras++] = inicio;
 
-    while (frente < tras) {
+    // enquanto a fila nao estiver vazia
+    while(frente < tras)
+    {
         int v = fila[frente++];
 
-        for (int i = 0; i < g->numVertices; i++) {
-            if (g->matriz[v][i] > 0) {
-                if (i == fim) {
+        // percorrendo os vizinhos
+        for (int i = 0; i < g->numVertices; i++)
+        {
+            // se tem conexao
+            if (g->matriz[v][i] > 0)
+            {
+                // chegou no destino (fim)
+                if (i == fim)
+                {
                     free(visitado);
+                    
                     free(fila);
+                    
                     return 1;
                 }
-                if (!visitado[i]) {
+
+                // se nao foi visitado -> marca como visitado e bota na fila (final)
+                if (!visitado[i])
+                {
                     visitado[i] = 1;
+                    
                     fila[tras++] = i;
                 }
             }
         }
     }
 
+    // free no vetor e na estrutura
     free(visitado);
+
     free(fila);
+    
     return 0;
 }
 
-void recomendarPasseMatriz(GrafoMatriz* g, int jogador) {
-    printf("\n=== Recomendacao de Passe (Matriz) para %s ===\n",
-           g->jogadores[jogador].nome);
+// recomendacao de passe -> sugere o melhor passe baseado no menor peso (maior entrosamento)
+void recomendarPasseMatriz(GrafoMatriz* g, int jogador)
+{
+    printf("\n=== Recomendacao de Passe (Matriz) para %s ===\n", g->jogadores[jogador].nome);
 
     float melhorPeso = FLT_MAX;
+
     int melhor = -1;
 
-    for (int i = 0; i < g->numVertices; i++) {
-        if (g->matriz[jogador][i] > 0 && g->matriz[jogador][i] < melhorPeso) {
+    // percorrendo os vizinhos para achar o de menor peso (maior entrosamento)
+    for (int i = 0; i < g->numVertices; i++)
+    {
+        // se tem conexao e o entrosamento for melhor (peso menor)
+        if (g->matriz[jogador][i] > 0 && g->matriz[jogador][i] < melhorPeso)
+        {
             melhorPeso = g->matriz[jogador][i];
             melhor = i;
         }
     }
 
-    if (melhor != -1) {
-        printf("Melhor passe: %s (entrosamento: %.2f)\n",
-               g->jogadores[melhor].nome, 1.0 / melhorPeso);
-    } else {
+    if (melhor != -1)
+    {
+        printf("Melhor passe: %s (entrosamento: %.2f)\n", g->jogadores[melhor].nome, 1.0 / melhorPeso);
+    } 
+    
+    else
+    {
         printf("Nenhum vizinho disponivel!\n");
     }
 }
