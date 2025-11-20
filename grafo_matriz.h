@@ -3,16 +3,19 @@
 
 #include "jogador.h"
 
+// estrutura grafo com matriz de adjacencia
 typedef struct {
     int numVertices;
     Jogador* jogadores;
     float** matriz;
 } GrafoMatriz;
 
+// funcoes do grafo com matriz de adjacencia
 GrafoMatriz* criarGrafoMatriz(int n, Jogador* jogs);
 void adicionarArestaMatriz(GrafoMatriz* g, int src, int dest, float peso);
 void liberarGrafoMatriz(GrafoMatriz* g);
 
+// algoritmos especificos
 void dfsMatriz(GrafoMatriz* g, int inicio);
 void bfsMatriz(GrafoMatriz* g, int inicio);
 void dijkstraMatriz(GrafoMatriz* g, int inicio, int fim);
